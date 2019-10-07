@@ -87,25 +87,44 @@ namespace SegasTelegramBotWebApplicationSP
             await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
             await Task.Delay(500);
             Random random = new Random();
-            if (1 == random.Next(1, 5))
+            switch (random.Next(1, 10))
             {
-                await Bot.SendTextMessageAsync(
-                            message.Chat.Id, message.From.FirstName + " очокос!");
-            }
-            if (2 == random.Next(1, 5))
-            {
-                await Bot.SendTextMessageAsync(
+                case 1:
+                    await Bot.SendTextMessageAsync(
+                            message.Chat.Id, message.From.FirstName + " очкосос!");
+                    break;
+                case 2:
+                    await Bot.SendTextMessageAsync(
                             message.Chat.Id, message.From.FirstName + " йде нахуй!");
-            }
-            if (3 == random.Next(1, 5))
-            {
-                await Bot.SendTextMessageAsync(
+                    break;
+                case 3:
+                    await Bot.SendTextMessageAsync(
                             message.Chat.Id, message.From.FirstName + " сосе яйця!");
-            }
-            else
-            {
-                await Bot.SendTextMessageAsync(
+                    break;
+                case 4:
+                    await Bot.SendTextMessageAsync(
+                            message.Chat.Id, message.From.FirstName + " пес!");
+                    break;
+                case 5:
+                    await Bot.SendTextMessageAsync(
+                            message.Chat.Id, message.From.FirstName + " ананіст!");
+                    break;
+                case 6:
+                    await Bot.SendTextMessageAsync(
+                            message.Chat.Id, message.From.FirstName + " козолуп!");
+                    break;
+                case 7:
+                    await Bot.SendTextMessageAsync(
+                            message.Chat.Id, message.From.FirstName + " делать коричневий грязь!");
+                    break;
+                case 8:
+                    await Bot.SendTextMessageAsync(
+                            message.Chat.Id, message.From.FirstName + " пєтух!");
+                    break;
+                default:
+                    await Bot.SendTextMessageAsync(
                         message.Chat.Id, message.From.FirstName + " норм пацан!");
+                    break;
             }
         }
     }
