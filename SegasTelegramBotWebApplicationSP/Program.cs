@@ -30,8 +30,8 @@ namespace SegasTelegramBotWebApplicationSP
 
         private static void InitBot()
         {
-            var me = Bot.GetMeAsync().Result;
-            //Console.Title = me.Username;
+            //var me = Bot.GetMeAsync().Result;
+
             Bot.OnMessage += BotOnMessageReceived;
             Bot.StartReceiving(Array.Empty<UpdateType>());
         }

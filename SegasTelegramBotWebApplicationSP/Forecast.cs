@@ -59,11 +59,8 @@ namespace SegasTelegramBotWebApplicationSP
             // Get the city, country, latitude, and longitude.
             XmlNode loc_node = xml_doc.SelectSingleNode("weatherdata/location");
             result.Add("City: ", loc_node.SelectSingleNode("name").InnerText);
-            result.Add("Caountry:", loc_node.SelectSingleNode("country").InnerText);
+            result.Add("Country:", loc_node.SelectSingleNode("country").InnerText);
             XmlNode geo_node = loc_node.SelectSingleNode("location");
-            //result.Add("Lat:", geo_node.Attributes["latitude"].Value);
-            //result.Add("Long:", geo_node.Attributes["longitude"].Value);
-            //result.Add("Geo:", geo_node.Attributes["geobaseid"].Value);
 
             char degrees = (char)176;
 
@@ -80,12 +77,8 @@ namespace SegasTelegramBotWebApplicationSP
                 if (!currentDay.Equals(time.DayOfWeek.ToString()))
                 {
                     currentDay = time.DayOfWeek.ToString();
-                    //ListViewItem item = lvwForecast.Items.Add(time.DayOfWeek.ToString());
                     result.Add(time.DayOfWeek.ToString(), $" {temp.Substring(0, temp.IndexOf('.')) + degrees}");
-                    //+ time.ToShortTimeString()
                 }
-                //item.SubItems.Add(time.ToShortTimeString());
-                //item.SubItems.Add(temp + degrees);
             }
             return result;
         }
