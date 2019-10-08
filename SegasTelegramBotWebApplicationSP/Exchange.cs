@@ -21,8 +21,8 @@ namespace SegasTelegramBotWebApplicationSP
                     List<Cash> cashes = ParseResult(client.DownloadString(PRIVAR_URL));
                     foreach (Cash item in cashes)
                     {
-                        result.Add($"Currency:  {item.ccy}  to:  {item.base_ccy}  Buy:  " +
-                            $"{item.buy.Substring(0, item.buy.IndexOf('.') + 3)}  Sale:  {item.sale.Substring(0, item.sale.IndexOf('.') + 3)}");
+                        result.Add($"Валюта:  {item.ccy}  в:  {item.base_ccy}  Купити:  " +
+                            $"{item.buy.Substring(0, item.buy.IndexOf('.') + 3)}  Продати:  {item.sale.Substring(0, item.sale.IndexOf('.') + 3)}");
                     }
                 }
                 catch
