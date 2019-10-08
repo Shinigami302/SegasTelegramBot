@@ -56,10 +56,20 @@ namespace SegasTelegramBotWebApplicationSP
         private async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
             var message = messageEventArgs.Message;
+            string messagesText = String.Empty;
             //Console.WriteLine(message.From.FirstName + " : " + message.Text);
             if (message == null || message.Type != MessageType.Text) return;
 
-            switch (message.Text)
+            if (message.Text.Contains("@SegasBot"))
+            {
+                messagesText = message.Text.Substring(0, message.Text.IndexOf("@SegasBot"));
+            }
+            else
+            {
+                messagesText = message.Text;
+            }
+
+            switch (messagesText)
             {
                 case "/start":
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
