@@ -90,14 +90,14 @@ namespace SegasTelegramBotWebApplicationSP
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                     await Task.Delay(500);
                     await Bot.SendTextMessageAsync(
-                                    message.Chat.Id, @"Ну хулі тут, вибирай: 
-                        /weather - погода у Львові 
-                        /roll - рулетка ( дефолт 1-100 )
-                        /lolRoll - LOL рулетка
-                        /exchange - курс валют
-                        /homoOfADay - підар дня
-                        /heroOfADay - герой дня
-                        /botReaction - реакція");
+                                    message.Chat.Id, "Ну хулі тут, вибирай: \n\n"
+                        + "/weather - погода у Львові\n" 
+                        + "/roll - рулетка ( дефолт 1-100 )\n"
+                        + "/lolRoll - LOL рулетка\n"
+                        + "/exchange - курс валют\n"
+                        + "/homoOfADay - підар дня\n"
+                        + "/heroOfADay - герой дня\n"
+                        + "/botReaction - реакція\n");
 
                     break;
                 case "/roll":
@@ -143,11 +143,11 @@ namespace SegasTelegramBotWebApplicationSP
                     {
                         new []
                         {
-                            InlineKeyboardButton.WithCallbackData("Так"),
-                            InlineKeyboardButton.WithCallbackData("Ні"),
+                            InlineKeyboardButton.WithCallbackData("Вкл"),
+                            InlineKeyboardButton.WithCallbackData("Викл"),
                         },
                     });
-                    await Bot.SendTextMessageAsync(message.Chat.Id, "Включити реакції?", replyMarkup: inlineKeyboard);
+                    await Bot.SendTextMessageAsync(message.Chat.Id, "Реакцію бота?", replyMarkup: inlineKeyboard);
                     break;
                 default:
                     if (Reaction) SimulateReaction(message);
@@ -202,13 +202,19 @@ namespace SegasTelegramBotWebApplicationSP
             String answer = callbackQueryEventArgs.CallbackQuery.Data.ToString();
             switch (answer)
             {
-                case "Так":
+                case "Вкл":
                     Reaction = true;
-                    await Bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, "Реакція ботіка включена");
+                    await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id, $"Реакція ботіка включена");
+                    //await Bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, "Реакція ботіка включена");
+                    await Task.Delay(1500);
+                    await Bot.DeleteMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, callbackQueryEventArgs.CallbackQuery.Message.MessageId);
                     break;
-                case "Ні":
+                case "Викл":
                     Reaction = false;
-                    await Bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, "Ботік буде вести себе тихо");
+                    await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id, $"Ботік буде вести себе тихо");
+                    //await Bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, "Ботік буде вести себе тихо");
+                    await Task.Delay(1500);
+                    await Bot.DeleteMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, callbackQueryEventArgs.CallbackQuery.Message.MessageId);
                     break;
                 default:
                     break;
