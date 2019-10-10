@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using SegasTelegramBotWebApplicationSP;
 
 namespace SegasTelegramBotWebApplicationSP.Pages
 {
@@ -11,7 +7,16 @@ namespace SegasTelegramBotWebApplicationSP.Pages
     {
         public void OnGet()
         {
+            if (BotHome.GetBotHomeInstance.BotReaction)
+            {
+                ViewData["BotReaction"] = "Bot Reaction is TURNED ON";
+            }
+            else
+            {
+                ViewData["BotReaction"] = "Bot Reaction is TURNED OFF";
+            }
 
+            ViewData["Error"] = BotHome.GetBotHomeInstance.GetError;
         }
     }
 }

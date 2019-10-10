@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InlineQueryResults;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace SegasTelegramBotWebApplicationSP
@@ -16,9 +14,11 @@ namespace SegasTelegramBotWebApplicationSP
         private readonly string TELEGRAM_TOKEN = "962554948:AAHh6J2clB-gNm4vIemRgXk9NxdET4ZobG4";
         private TelegramBotClient bot;
         private static BotHome _instance;
-        private bool Reaction;
-        private User CurrentUser;
+        private bool botIsRunning;
+        private bool reaction;
+        private User currentUser;
         private int messageCountFromOneUser;
+        private string error;
 
         public static BotHome GetBotHomeInstance
         {
@@ -31,6 +31,16 @@ namespace SegasTelegramBotWebApplicationSP
                 return _instance;
             }
 
+        }
+
+        public bool BotReaction
+        {
+            get => reaction;
+        }
+
+        public string GetError
+        {
+            get => error;
         }
 
         private TelegramBotClient Bot
@@ -48,12 +58,18 @@ namespace SegasTelegramBotWebApplicationSP
         public void BotInit()
         {
             //var me = Bot.GetMeAsync().Result;
-            Bot.OnMessage += BotOnMessageReceived;
-            Bot.OnMessageEdited += BotOnMessageReceived;
-            Bot.OnCallbackQuery += BotOnCallbackQueryReceived;
-            Bot.OnReceiveError += BotOnReceiveError;
-            Bot.StartReceiving(Array.Empty<UpdateType>());
-            messageCountFromOneUser = 0;
+            if (!botIsRunning)
+            {
+                botIsRunning = true;
+                Bot.OnMessage += BotOnMessageReceived;
+                Bot.OnMessageEdited += BotOnMessageReceived;
+                Bot.OnCallbackQuery += BotOnCallbackQueryReceived;
+                Bot.OnReceiveError += BotOnReceiveError;
+                Bot.StartReceiving(Array.Empty<UpdateType>());
+                messageCountFromOneUser = 0;
+                currentUser = null;
+                reaction = false;
+            }
         }
 
         public void BotStopReceiving()
@@ -139,6 +155,8 @@ namespace SegasTelegramBotWebApplicationSP
                     HeroOfADay(message);
                     break;
                 case "/botReaction":
+                    if (reaction) await Bot.SendTextMessageAsync(message.Chat.Id, $"Реакція зараз включена.");
+                    else await Bot.SendTextMessageAsync(message.Chat.Id, $"Реакція зараз виключена.");
                     var inlineKeyboard = new InlineKeyboardMarkup(new[]
                     {
                         new []
@@ -150,16 +168,19 @@ namespace SegasTelegramBotWebApplicationSP
                     await Bot.SendTextMessageAsync(message.Chat.Id, "Реакцію бота?", replyMarkup: inlineKeyboard);
                     break;
                 default:
-                    if (Reaction) SimulateReaction(message);
+                    if (reaction) SimulateReaction(message);
                         break;
             }
         }
 
         private async void SimulateReaction(Message message)
         {
-            if (CurrentUser != message.From)
+            string messageText = message.Text;
+            messageText = messageText.ToLower();
+
+            if (currentUser != message.From)
             {
-                CurrentUser = message.From;
+                currentUser = message.From;
                 messageCountFromOneUser = 0;
             }
             else
@@ -170,8 +191,48 @@ namespace SegasTelegramBotWebApplicationSP
                     await Bot.SendTextMessageAsync(message.Chat.Id, $"{message.From.FirstName}, воу-воу братан, полєгче. Все норм, розслабся.");
                 }
             }
-
             Random random = new Random();
+            
+            int lenghtToCut = messageText.StartsWith("бот") ? 3 : 5;
+            if (messageText.StartsWith("бот") || messageText.StartsWith("ботік"))
+            {
+                messageText = messageText.Substring(lenghtToCut, messageText.Length - lenghtToCut);
+                if (messageText.Contains("думаєш") || messageText.Contains("чьо скажеш"))
+                {
+                    await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+                    await Task.Delay(500);
+                    switch (random.Next(1, 4))
+                    {
+                        case 1:
+                            await Bot.SendTextMessageAsync(message.Chat.Id, $"Думаю норм тема!");
+                            break;
+                        case 2:
+                            await Bot.SendTextMessageAsync(message.Chat.Id, $"Якщо чесно, думаю то хуйня.");
+                            break;
+                        case 3:
+                            await Bot.SendTextMessageAsync(message.Chat.Id, $"Ну... хз хз.");
+                            break;
+                    }
+                }
+                if (messageText.Contains("як справи") || messageText.Contains("чьо там"))
+                {
+                    await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+                    await Task.Delay(500);
+                    switch (random.Next(1, 4))
+                    {
+                        case 1:
+                            await Bot.SendTextMessageAsync(message.Chat.Id, $"Нормас, живий поки і на тому дякую :)");
+                            break;
+                        case 2:
+                            await Bot.SendTextMessageAsync(message.Chat.Id, $"Та щось так собі. Погода походу міняється.");
+                            break;
+                        case 3:
+                            await Bot.SendTextMessageAsync(message.Chat.Id, $"Чесно, братан, хуйово. Біток знову падає...");
+                            break;
+                    }
+                }
+            }
+
             switch (random.Next(1, 100))
             {
                 case 1:
@@ -203,27 +264,25 @@ namespace SegasTelegramBotWebApplicationSP
             switch (answer)
             {
                 case "Вкл":
-                    Reaction = true;
+                    reaction = true;
                     await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id, $"Реакція ботіка включена");
-                    //await Bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, "Реакція ботіка включена");
-                    await Task.Delay(1500);
-                    await Bot.DeleteMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, callbackQueryEventArgs.CallbackQuery.Message.MessageId);
+                    await Bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, "Реакція ботіка включена");
                     break;
                 case "Викл":
-                    Reaction = false;
-                    await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id, $"Ботік буде вести себе тихо");
-                    //await Bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, "Ботік буде вести себе тихо");
-                    await Task.Delay(1500);
-                    await Bot.DeleteMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, callbackQueryEventArgs.CallbackQuery.Message.MessageId);
+                    reaction = false;
+                    await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id, $"Реакція ботіка виключена");
+                    await Bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, "Реакція ботіка виключена");
                     break;
                 default:
                     break;
             }
+            await Task.Delay(1500);
+            await Bot.DeleteMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, callbackQueryEventArgs.CallbackQuery.Message.MessageId);
         }
 
         private void BotOnReceiveError(object sender, ReceiveErrorEventArgs receiveErrorEventArgs)
         {
-            //TODO
+            error += receiveErrorEventArgs.ApiRequestException.Message;
         }
 
         async private void Roll(Message message, string range)
@@ -246,7 +305,7 @@ namespace SegasTelegramBotWebApplicationSP
             await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
             await Task.Delay(500);
             Random random = new Random();
-            switch (random.Next(1, 10))
+            switch (random.Next(1, 11))
             {
                 case 1:
                     await Bot.SendTextMessageAsync(

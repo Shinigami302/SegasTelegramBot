@@ -2,9 +2,22 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
-}
 
+}
+    <script>
+        //just a temporary workaround - refresh page every 10 min to keep bot alive
+        function timedRefresh(timeoutPeriod) {
+            setTimeout("location.reload(true);", timeoutPeriod);
+        }
+        window.onload = timedRefresh(600000);
+    </script>
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome on SegasBot page!</h1>
 </div>
+<p></p>
+<p><input type="button" value="Refresh" onClick="document.location.reload(true)"></p>
+<p></p>
+<p>Log window:</p>
+@ViewData["BotReaction"]
+@ViewData["Error"]
+
