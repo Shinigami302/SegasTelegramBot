@@ -19,6 +19,7 @@ namespace SegasTelegramBotWebApplicationSP
         private User currentUser;
         private int messageCountFromOneUser;
         private string error;
+        private bool firstRevMode;
 
         public static BotHome GetBotHomeInstance
         {
@@ -82,9 +83,20 @@ namespace SegasTelegramBotWebApplicationSP
             var message = messageEventArgs.Message;
             string messagesText = String.Empty;
             string range = String.Empty;
-            //Console.WriteLine(message.From.FirstName + " : " + message.Text);
             if (message == null || message.Type != MessageType.Text) return;
-
+            if (firstRevMode)
+            {
+                if (!message.Text.Contains("/botClassic"))
+                {
+                    await Bot.SendTextMessageAsync(message.Chat.Id, $"{message.Text}? да пішов ти нахуй, {message.From.FirstName}!");
+                }
+                else
+                {
+                    firstRevMode = false;
+                    await Bot.SendTextMessageAsync(message.Chat.Id, $"Режим бота першої ревізії ВИКЛ");
+                }
+                return;
+            }
             if (message.Text.Contains("@SegasBot"))
             {
                 messagesText = message.Text.Substring(0, message.Text.IndexOf("@SegasBot"));
@@ -166,6 +178,10 @@ namespace SegasTelegramBotWebApplicationSP
                         },
                     });
                     await Bot.SendTextMessageAsync(message.Chat.Id, "Реакцію бота?", replyMarkup: inlineKeyboard);
+                    break;
+                case "/botClassic":
+                    await Bot.SendTextMessageAsync(message.Chat.Id, $"Режим бота першої ревізії ВКЛ.");
+                    firstRevMode = true;
                     break;
                 default:
                     if (reaction) SimulateReaction(message);
@@ -260,7 +276,8 @@ namespace SegasTelegramBotWebApplicationSP
 
         private async void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs callbackQueryEventArgs)
         {
-            String answer = callbackQueryEventArgs.CallbackQuery.Data.ToString();
+            string answer = callbackQueryEventArgs.CallbackQuery.Data.ToString();
+
             switch (answer)
             {
                 case "Вкл":
