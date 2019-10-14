@@ -1,0 +1,50 @@
+﻿@page
+@model SegasTelegramBotWebApplicationSP.Pages.CRUD.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>SBCommands</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SBCommands.Users" class="control-label"></label>
+                <input asp-for="SBCommands.Users" class="form-control" />
+                <span asp-validation-for="SBCommands.Users" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SBCommands.Reactions" class="control-label"></label>
+                <input asp-for="SBCommands.Reactions" class="form-control" />
+                <span asp-validation-for="SBCommands.Reactions" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SBCommands.HowAreYou" class="control-label"></label>
+                <input asp-for="SBCommands.HowAreYou" class="form-control" />
+                <span asp-validation-for="SBCommands.HowAreYou" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SBCommands.Answers" class="control-label"></label>
+                <input asp-for="SBCommands.Answers" class="form-control" />
+                <span asp-validation-for="SBCommands.Answers" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

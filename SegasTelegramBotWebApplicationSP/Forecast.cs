@@ -25,6 +25,8 @@ namespace SegasTelegramBotWebApplicationSP
         // Query codes.
         private string[] QueryCodes = { "q", "zip", "id", };
 
+        private string prelimTemp = String.Empty;
+
         public Dictionary<string, string> GetLivsForecast()
         {
             string url = ForecastUrl.Replace("@LOC@", "702550");
@@ -64,15 +66,31 @@ namespace SegasTelegramBotWebApplicationSP
                 DateTime time =
                     DateTime.Parse(time_node.Attributes["from"].Value,
                         null, DateTimeStyles.AssumeUniversal);
-                var culture = new CultureInfo("ua-UA");
+                var culture = new CultureInfo("uk-UA");
 
                 // Get the temperature.
                 XmlNode temp_node = time_node.SelectSingleNode("temperature");
                 string temp = temp_node.Attributes["value"].Value;
-                if (!currentDay.Equals(time.DayOfWeek.ToString()))
+                XmlNode clouds_node = time_node.SelectSingleNode("clouds");
+                string cloudsVal = clouds_node.Attributes["value"].Value;
+                double tempNum = Math.Round(double.Parse(temp.Replace('.', ',')));
+                
+                if (time.TimeOfDay == new TimeSpan(09, 00, 00))
+                {
+                    prelimTemp = tempNum.ToString();
+                }
+                if (!currentDay.Equals(time.DayOfWeek.ToString()) && time.TimeOfDay == new TimeSpan(12, 00, 00))
                 {
                     currentDay = time.DayOfWeek.ToString();
-                    result.Add(culture.DateTimeFormat.GetDayName(time.DayOfWeek).ToString(), $" {temp.Substring(0, temp.IndexOf('.')) + degrees}");
+                    if (!string.Empty.Equals(prelimTemp))
+                    {
+                        result.Add(culture.DateTimeFormat.GetDayName(time.DayOfWeek).ToString(), 
+                            $":  {prelimTemp + degrees} - {tempNum.ToString() + degrees}  {cloudsVal}");
+                    }
+                    else
+                    {
+                        result.Add(culture.DateTimeFormat.GetDayName(time.DayOfWeek).ToString(), $":  {tempNum.ToString() + degrees}  {cloudsVal}");
+                    }
                 }
             }
             return result;

@@ -1,0 +1,66 @@
+﻿@page
+@model SegasTelegramBotWebApplicationSP.Pages.CRUD.IndexModel
+
+@{
+    ViewData["Title"] = "Admin's Panel";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Admin's Panel</h1>
+<!--
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+    -->
+<p>Reaction: @ViewData["BotReaction"]</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].Users)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].Reactions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].HowAreYou)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].Answers)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.SBCommands)
+        {
+            <tr>
+                <td>
+                    <div class="b">@Html.DisplayFor(modelItem => item.Users)</div>
+                </td>
+                <td>
+                    <div class="b">@Html.DisplayFor(modelItem => item.Reactions)</div>
+                </td>
+                <td>
+                    <div class="b">@Html.DisplayFor(modelItem => item.HowAreYou)</div>
+                </td>
+                <td>
+                    <div class="b">@Html.DisplayFor(modelItem => item.Answers)</div>
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
+                    <!--|
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                        |
+                     <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                    -->
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>Log window:</p>
+@ViewData["Error"]
+

@@ -1,0 +1,71 @@
+﻿@page
+@model SegasTelegramBotWebApplicationSP.Pages.CRUD.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>SBCommands</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SBCommands.Id" />
+            <div class="form-group">
+                <label asp-for="SBCommands.Users" class="control-label"></label>
+                <textarea asp-for="SBCommands.Users" class="form-control666"></textarea>
+                <span asp-validation-for="SBCommands.Users" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SBCommands.Reactions" class="control-label"></label>
+                <textarea asp-for="SBCommands.Reactions" class="form-control666"></textarea>
+                <span asp-validation-for="SBCommands.Reactions" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SBCommands.HowAreYou" class="control-label"></label>
+                <textarea asp-for="SBCommands.HowAreYou" class="form-control666"></textarea>
+                <span asp-validation-for="SBCommands.HowAreYou" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SBCommands.Answers" class="control-label"></label>
+                <textarea asp-for="SBCommands.Answers" class="form-control666"></textarea>
+                <span asp-validation-for="SBCommands.Answers" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<style>
+
+    .form-control666 {
+    display: block;
+    width: 300%;
+    height: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+</style>

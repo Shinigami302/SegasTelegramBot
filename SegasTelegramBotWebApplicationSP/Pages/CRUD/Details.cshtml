@@ -1,0 +1,44 @@
+﻿@page
+@model SegasTelegramBotWebApplicationSP.Pages.CRUD.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>SBCommands</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SBCommands.Users)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SBCommands.Users)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SBCommands.Reactions)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SBCommands.Reactions)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SBCommands.HowAreYou)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SBCommands.HowAreYou)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SBCommands.Answers)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SBCommands.Answers)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.SBCommands.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

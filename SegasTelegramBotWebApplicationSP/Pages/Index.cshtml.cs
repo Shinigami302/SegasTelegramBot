@@ -7,16 +7,7 @@ namespace SegasTelegramBotWebApplicationSP.Pages
     {
         public void OnGet()
         {
-            if (BotHome.GetBotHomeInstance.BotReaction)
-            {
-                ViewData["BotReaction"] = "Bot Reaction is TURNED ON";
-            }
-            else
-            {
-                ViewData["BotReaction"] = "Bot Reaction is TURNED OFF";
-            }
 
-            ViewData["Error"] = BotHome.GetBotHomeInstance.GetError;
         }
     }
 }

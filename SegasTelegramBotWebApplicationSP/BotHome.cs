@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using SegasTelegramBotWebApplicationSP.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -20,6 +22,8 @@ namespace SegasTelegramBotWebApplicationSP
         private int messageCountFromOneUser;
         private string error;
         private bool firstRevMode;
+        private SegasBotContext _context;
+        private DataReader _dataReader;
 
         public static BotHome GetBotHomeInstance
         {
@@ -44,6 +48,20 @@ namespace SegasTelegramBotWebApplicationSP
             get => error;
         }
 
+        private DataReader DataReader
+        {
+            get
+            {
+                if (null == _dataReader && null != _context)
+                {
+                    _dataReader = new DataReader(_context);
+                    return _dataReader;
+                }
+                return _dataReader; 
+            }
+ 
+        }
+
         private TelegramBotClient Bot
         {
             get
@@ -56,12 +74,13 @@ namespace SegasTelegramBotWebApplicationSP
             }
         }
 
-        public void BotInit()
+        public void BotInit(SegasBotContext context)
         {
             //var me = Bot.GetMeAsync().Result;
             if (!botIsRunning)
             {
                 botIsRunning = true;
+                _context = context;
                 Bot.OnMessage += BotOnMessageReceived;
                 Bot.OnMessageEdited += BotOnMessageReceived;
                 Bot.OnCallbackQuery += BotOnCallbackQueryReceived;
@@ -209,69 +228,44 @@ namespace SegasTelegramBotWebApplicationSP
             }
             Random random = new Random();
             
-            int lenghtToCut = messageText.StartsWith("бот") ? 3 : 5;
+            int lenghtToCut = messageText.StartsWith("ботік") ? 5 : 3;
             if (messageText.StartsWith("бот") || messageText.StartsWith("ботік"))
             {
                 messageText = messageText.Substring(lenghtToCut, messageText.Length - lenghtToCut);
-                if (messageText.Contains("думаєш") || messageText.Contains("чьо скажеш"))
+                if (messageText.Contains("думаєш") || messageText.Contains("чьо скажеш") || messageText.Contains("варіант")
+                    || messageText.Contains("правда"))
                 {
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                     await Task.Delay(500);
-                    switch (random.Next(1, 4))
-                    {
-                        case 1:
-                            await Bot.SendTextMessageAsync(message.Chat.Id, $"Думаю норм тема!");
-                            break;
-                        case 2:
-                            await Bot.SendTextMessageAsync(message.Chat.Id, $"Якщо чесно, думаю то хуйня.");
-                            break;
-                        case 3:
-                            await Bot.SendTextMessageAsync(message.Chat.Id, $"Ну... хз хз.");
-                            break;
-                    }
+                    string[] answers = DataReader.GetAnswers();
+                    string answer = answers[random.Next(1, answers.Length)];
+                    await Bot.SendTextMessageAsync(message.Chat.Id, answer);
+                    return;
                 }
-                if (messageText.Contains("як справи") || messageText.Contains("чьо там"))
-                {
-                    await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-                    await Task.Delay(500);
-                    switch (random.Next(1, 4))
-                    {
-                        case 1:
-                            await Bot.SendTextMessageAsync(message.Chat.Id, $"Нормас, живий поки і на тому дякую :)");
-                            break;
-                        case 2:
-                            await Bot.SendTextMessageAsync(message.Chat.Id, $"Та щось так собі. Погода походу міняється.");
-                            break;
-                        case 3:
-                            await Bot.SendTextMessageAsync(message.Chat.Id, $"Чесно, братан, хуйово. Біток знову падає...");
-                            break;
-                    }
-                }
-            }
 
-            switch (random.Next(1, 100))
-            {
-                case 1:
-                    await Bot.SendTextMessageAsync(message.Chat.Id, $"{message.From.FirstName}, ну ти знову за своє?");
-                    break;
-                case 2:
-                    await Bot.SendTextMessageAsync(message.Chat.Id, $"{message.From.FirstName}, далі хуйню пишеш...");
-                    break;
-                case 3:
-                    await Bot.SendTextMessageAsync(message.Chat.Id, $"Тру сторі, бро.");
-                    break;
-                case 4:
-                    await Bot.SendTextMessageAsync(message.Chat.Id, $"Да да, апруваю!");
-                    break;
-                case 5:
-                    await Bot.SendTextMessageAsync(message.Chat.Id, $"Буває.");
-                    break;
-                case 6:
-                    await Bot.SendTextMessageAsync(message.Chat.Id, $"Йди посри, мб пройде.");
-                    break;
-                default:
-                    break;
+
+                if (messageText.Contains("як справи") || messageText.Contains("чьо там") || messageText.Contains("ти як"))
+                {
+                    await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+                    await Task.Delay(500);
+                    string[] howAreYouVar = DataReader.GetHowAreYou();
+                    string howAreYou = howAreYouVar[random.Next(1, howAreYouVar.Length)];
+                    await Bot.SendTextMessageAsync(message.Chat.Id, howAreYou);
+                    return;
+                }
             }
+            if (1 == random.Next(1, 15))
+            {
+                string[] reactions = DataReader.GetReactions();
+                string reaction = reactions[random.Next(1, reactions.Length)];
+                if (reaction.Contains("{name}"))
+                {
+                    reaction = reaction.Replace("{name}", message.From.FirstName);
+                }
+                await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+                await Task.Delay(500);
+                await Bot.SendTextMessageAsync(message.Chat.Id, reaction);
+            }           
         }
 
         private async void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs callbackQueryEventArgs)
@@ -367,7 +361,7 @@ namespace SegasTelegramBotWebApplicationSP
         {
             await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
             await Task.Delay(500);
-            string[] users = { "Сєрий", "Паша", "Бодя", "Вася", "Славік" };
+            string[] users = DataReader.GetUsers();
             Random random = new Random();
             string user = users[random.Next(0, 4)];
 
@@ -384,7 +378,7 @@ namespace SegasTelegramBotWebApplicationSP
         {
             await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
             await Task.Delay(500);
-            string[] users = { "Сєрий", "Паша", "Бодя", "Вася", "Славік" };
+            string[] users = DataReader.GetUsers();
             Random random = new Random();
             string user = users[random.Next(0, 4)];
 
