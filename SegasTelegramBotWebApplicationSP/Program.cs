@@ -22,7 +22,6 @@ namespace SegasTelegramBotWebApplicationSP
 
             //try
             //{
-            //    var ctx = services.GetRequiredService<SegasBotContext>();
             //    var testItem = new SBCommands() { Answers = "1" };
             //    ctx.SBCommands.Add(testItem);
             //    ctx.SaveChanges();

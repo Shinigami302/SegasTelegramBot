@@ -6,9 +6,11 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h4>Commands for bot here:</h4>
+<p></p>
+<p>Please enter comands in next format: "Your text + ;"</p>
+<p>Note! Last command should not end with ';' sign."</p>
 
-<h4>SBCommands</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -34,6 +36,16 @@
                 <label asp-for="SBCommands.Answers" class="control-label"></label>
                 <textarea asp-for="SBCommands.Answers" class="form-control666"></textarea>
                 <span asp-validation-for="SBCommands.Answers" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SBCommands.TriggersAnswers" class="control-label"></label>
+                <textarea asp-for="SBCommands.TriggersAnswers" class="form-control666"></textarea>
+                <span asp-validation-for="SBCommands.TriggersAnswers" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SBCommands.TriggersHowAreYou" class="control-label"></label>
+                <textarea asp-for="SBCommands.TriggersHowAreYou" class="form-control666"></textarea>
+                <span asp-validation-for="SBCommands.TriggersHowAreYou" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

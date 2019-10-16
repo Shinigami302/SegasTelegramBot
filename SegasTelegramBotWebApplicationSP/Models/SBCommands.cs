@@ -7,5 +7,7 @@
         public string Reactions { get; set; }
         public string HowAreYou { get; set; }
         public string Answers { get; set; }
+        public string TriggersHowAreYou { get; set; }
+        public string TriggersAnswers { get; set; }
     }
 }

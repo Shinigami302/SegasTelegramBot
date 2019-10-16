@@ -24,6 +24,7 @@ namespace SegasTelegramBotWebApplicationSP
         private bool firstRevMode;
         private SegasBotContext _context;
         private DataReader _dataReader;
+        private int reactionChance;
 
         public static BotHome GetBotHomeInstance
         {
@@ -46,6 +47,25 @@ namespace SegasTelegramBotWebApplicationSP
         public string GetError
         {
             get => error;
+        }
+
+        public int ReactionChance 
+        { 
+            get 
+            {
+                if (reactionChance > 0)
+                {
+                    return reactionChance;
+                }
+                else
+                {
+                    return 7;
+                }
+            } 
+            set 
+            { 
+                reactionChance = value; 
+            } 
         }
 
         private DataReader DataReader
@@ -87,6 +107,7 @@ namespace SegasTelegramBotWebApplicationSP
                 Bot.OnReceiveError += BotOnReceiveError;
                 Bot.StartReceiving(Array.Empty<UpdateType>());
                 messageCountFromOneUser = 0;
+                reactionChance = 0;
                 currentUser = null;
                 reaction = false;
             }
@@ -232,8 +253,17 @@ namespace SegasTelegramBotWebApplicationSP
             if (messageText.StartsWith("бот") || messageText.StartsWith("ботік"))
             {
                 messageText = messageText.Substring(lenghtToCut, messageText.Length - lenghtToCut);
-                if (messageText.Contains("думаєш") || messageText.Contains("чьо скажеш") || messageText.Contains("варіант")
-                    || messageText.Contains("правда"))
+                string[] triggerAnswers = DataReader.GetTriggersAnswers();
+                bool triggerAnswerIsfound = false;
+                foreach (string item in triggerAnswers)
+                {
+                    if (messageText.Contains(item))
+                    {
+                        triggerAnswerIsfound = true;
+                        break;
+                    }
+                }
+                if (triggerAnswerIsfound)
                 {
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                     await Task.Delay(500);
@@ -243,8 +273,17 @@ namespace SegasTelegramBotWebApplicationSP
                     return;
                 }
 
-
-                if (messageText.Contains("як справи") || messageText.Contains("чьо там") || messageText.Contains("ти як"))
+                string[] triggerHowAreYou= DataReader.GetTriggersAnswers();
+                bool triggerHowAreYouIsfound = false;
+                foreach (string item in triggerHowAreYou)
+                {
+                    if (messageText.Contains(item))
+                    {
+                        triggerHowAreYouIsfound = true;
+                        break;
+                    }
+                }
+                if (triggerHowAreYouIsfound)
                 {
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                     await Task.Delay(500);
@@ -254,7 +293,8 @@ namespace SegasTelegramBotWebApplicationSP
                     return;
                 }
             }
-            if (1 == random.Next(1, 15))
+
+            if (ReactionChance >= random.Next(1, 101))
             {
                 string[] reactions = DataReader.GetReactions();
                 string reaction = reactions[random.Next(1, reactions.Length)];

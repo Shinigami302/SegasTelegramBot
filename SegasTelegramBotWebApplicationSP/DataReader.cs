@@ -17,6 +17,8 @@ namespace SegasTelegramBotWebApplicationSP
         private string reactions;
         private string howAreYou;
         private string answers;
+        private string triggersAnswers;
+        private string triggersHowAreYou;
 
         public DataReader GetDataReader
         {
@@ -63,6 +65,20 @@ namespace SegasTelegramBotWebApplicationSP
             return val;
         }
 
+        public string[] GetTriggersHowAreYou()
+        {
+            string[] val = triggersHowAreYou.Split(';');
+            return val;
+        }
+
+
+        public string[] GetTriggersAnswers()
+        {
+            string[] val = triggersAnswers.Split(';');
+            return val;
+        }
+
+
         private void Init()
         {
             try
@@ -74,6 +90,8 @@ namespace SegasTelegramBotWebApplicationSP
                     reactions = list[0].Reactions;
                     howAreYou = list[0].HowAreYou;
                     answers = list[0].Answers;
+                    triggersAnswers = list[0].TriggersAnswers;
+                    triggersHowAreYou = list[0].TriggersHowAreYou;
                 }
                 else
                 {

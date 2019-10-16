@@ -13,6 +13,7 @@
 </p>
     -->
 <p>Reaction: @ViewData["BotReaction"]</p>
+<p>Reaction chance (%): <input asp-for="ReactionChance" /></p>
 
 <table class="table">
     <thead>
@@ -29,34 +30,46 @@
             <th>
                 @Html.DisplayNameFor(model => model.SBCommands[0].Answers)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].TriggersAnswers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].TriggersHowAreYou)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.SBCommands)
         {
-            <tr>
-                <td>
-                    <div class="b">@Html.DisplayFor(modelItem => item.Users)</div>
-                </td>
-                <td>
-                    <div class="b">@Html.DisplayFor(modelItem => item.Reactions)</div>
-                </td>
-                <td>
-                    <div class="b">@Html.DisplayFor(modelItem => item.HowAreYou)</div>
-                </td>
-                <td>
-                    <div class="b">@Html.DisplayFor(modelItem => item.Answers)</div>
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
-                    <!--|
-                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
-                        |
-                     <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-                    -->
-                </td>
-            </tr>
+        <tr>
+            <td>
+                <div class="b">@Html.DisplayFor(modelItem => item.Users)</div>
+            </td>
+            <td>
+                <div class="b">@Html.DisplayFor(modelItem => item.Reactions)</div>
+            </td>
+            <td>
+                <div class="b">@Html.DisplayFor(modelItem => item.HowAreYou)</div>
+            </td>
+            <td>
+                <div class="b">@Html.DisplayFor(modelItem => item.Answers)</div>
+            </td>
+            <td>
+                <div class="b">@Html.DisplayFor(modelItem => item.TriggersAnswers)</div>
+            </td>
+            <td>
+                <div class="b">@Html.DisplayFor(modelItem => item.TriggersHowAreYou)</div>
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
+                <!--|
+        <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+            |
+         <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+        -->
+            </td>
+        </tr>
         }
     </tbody>
 </table>
