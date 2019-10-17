@@ -21,6 +21,11 @@ namespace SegasTelegramBotWebApplicationSP.Pages.CRUD
 
         [BindProperty]
         public SBCommands SBCommands { get; set; }
+        [BindProperty]
+        public int ReactionChance { get; set; }
+
+        [BindProperty]
+        public bool Reaction{ get; set; }
 
         public async Task<IActionResult> OnGetAsync(long? id)
         {
@@ -28,9 +33,10 @@ namespace SegasTelegramBotWebApplicationSP.Pages.CRUD
             {
                 return NotFound();
             }
-
+            
+            ReactionChance = BotHome.GetBotHomeInstance.ReactionChance;
             SBCommands = await _context.SBCommands.FirstOrDefaultAsync(m => m.Id == id);
-
+            Reaction = BotHome.GetBotHomeInstance.BotReaction;
             if (SBCommands == null)
             {
                 return NotFound();
@@ -44,12 +50,17 @@ namespace SegasTelegramBotWebApplicationSP.Pages.CRUD
             {
                 return Page();
             }
-
+            BotHome.GetBotHomeInstance.BotReaction = Reaction;
+            BotHome.GetBotHomeInstance.ReactionChance = ReactionChance;
             _context.Attach(SBCommands).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                int i = await _context.SaveChangesAsync();
+                if (0 < i)
+                {
+                    BotHome.GetBotHomeInstance.ReInitDataReader(_context);
+                }
             }
             catch (DbUpdateConcurrencyException)
             {

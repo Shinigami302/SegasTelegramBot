@@ -19,7 +19,7 @@ namespace SegasTelegramBotWebApplicationSP.Pages.CRUD
         }
 
         public IList<SBCommands> SBCommands { get; set; }
-        public int ReactionChance { get; set; }
+        
         public async Task OnGetAsync()
         {
             if (BotHome.GetBotHomeInstance.BotReaction)
@@ -31,13 +31,12 @@ namespace SegasTelegramBotWebApplicationSP.Pages.CRUD
                 ViewData["BotReaction"] = "Bot Reaction is TURNED OFF";
             }
 
-            ViewData["BotReactionChance"] = BotHome.GetBotHomeInstance.ReactionChance.ToString();
+            ViewData["ReactionChance"] = BotHome.GetBotHomeInstance.ReactionChance.ToString();
 
             ViewData["Error"] = BotHome.GetBotHomeInstance.GetError;
 
-            ReactionChance = BotHome.GetBotHomeInstance.ReactionChance;
-
             SBCommands = await _context.SBCommands.ToListAsync();
         }
+
     }
 }

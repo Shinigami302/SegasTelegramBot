@@ -22,7 +22,7 @@ namespace SegasTelegramBotWebApplicationSP
 
         public DataReader GetDataReader
         {
-            get 
+            get
             {
                 if (null == _dataReader)
                 {
@@ -41,7 +41,13 @@ namespace SegasTelegramBotWebApplicationSP
             Init();
         }
         public DataReader()
-        { 
+        {
+        }
+
+        public void ReInit(SegasBotContext context)
+        {
+            _context = context;
+            Init();
         }
 
         public string[] GetUsers()

@@ -17,7 +17,7 @@ namespace SegasTelegramBotWebApplicationSP
         private TelegramBotClient bot;
         private static BotHome _instance;
         private bool botIsRunning;
-        private bool reaction;
+        private bool _reaction;
         private User currentUser;
         private int messageCountFromOneUser;
         private string error;
@@ -41,7 +41,8 @@ namespace SegasTelegramBotWebApplicationSP
 
         public bool BotReaction
         {
-            get => reaction;
+            get => _reaction;
+            set { _reaction = value; }
         }
 
         public string GetError
@@ -82,6 +83,11 @@ namespace SegasTelegramBotWebApplicationSP
  
         }
 
+        public void ReInitDataReader(SegasBotContext context)
+        {
+            DataReader.ReInit(context);
+        }
+
         private TelegramBotClient Bot
         {
             get
@@ -109,7 +115,7 @@ namespace SegasTelegramBotWebApplicationSP
                 messageCountFromOneUser = 0;
                 reactionChance = 0;
                 currentUser = null;
-                reaction = false;
+                _reaction = false;
             }
         }
 
@@ -164,8 +170,7 @@ namespace SegasTelegramBotWebApplicationSP
                         + "/lolRoll - LOL рулетка\n"
                         + "/exchange - курс валют\n"
                         + "/homoOfADay - підар дня\n"
-                        + "/heroOfADay - герой дня\n"
-                        + "/botReaction - реакція\n");
+                        + "/heroOfADay - герой дня\n");
 
                     break;
                 case "/roll":
@@ -207,7 +212,7 @@ namespace SegasTelegramBotWebApplicationSP
                     HeroOfADay(message);
                     break;
                 case "/botReaction":
-                    if (reaction) await Bot.SendTextMessageAsync(message.Chat.Id, $"Реакція зараз включена.");
+                    if (_reaction) await Bot.SendTextMessageAsync(message.Chat.Id, $"Реакція зараз включена.");
                     else await Bot.SendTextMessageAsync(message.Chat.Id, $"Реакція зараз виключена.");
                     var inlineKeyboard = new InlineKeyboardMarkup(new[]
                     {
@@ -224,7 +229,7 @@ namespace SegasTelegramBotWebApplicationSP
                     firstRevMode = true;
                     break;
                 default:
-                    if (reaction) SimulateReaction(message);
+                    if (_reaction) SimulateReaction(message);
                         break;
             }
         }
@@ -273,7 +278,7 @@ namespace SegasTelegramBotWebApplicationSP
                     return;
                 }
 
-                string[] triggerHowAreYou= DataReader.GetTriggersAnswers();
+                string[] triggerHowAreYou= DataReader.GetTriggersHowAreYou();
                 bool triggerHowAreYouIsfound = false;
                 foreach (string item in triggerHowAreYou)
                 {
@@ -315,12 +320,12 @@ namespace SegasTelegramBotWebApplicationSP
             switch (answer)
             {
                 case "Вкл":
-                    reaction = true;
+                    _reaction = true;
                     await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id, $"Реакція ботіка включена");
                     await Bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, "Реакція ботіка включена");
                     break;
                 case "Викл":
-                    reaction = false;
+                    _reaction = false;
                     await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id, $"Реакція ботіка виключена");
                     await Bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Message.Chat.Id, "Реакція ботіка виключена");
                     break;
