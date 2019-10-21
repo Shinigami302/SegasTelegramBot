@@ -130,7 +130,6 @@ namespace SegasTelegramBotWebApplicationSP
             };
             Random random = new Random();
             await bot.SendTextMessageAsync(message.Chat.Id, proverbs[random.Next(proverbs.Length)]);
-            await bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
         }
 
     }
