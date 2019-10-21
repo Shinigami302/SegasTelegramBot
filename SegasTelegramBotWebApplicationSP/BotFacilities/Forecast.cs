@@ -54,8 +54,8 @@ namespace SegasTelegramBotWebApplicationSP
 
             // Get the city, country, latitude, and longitude.
             XmlNode loc_node = xml_doc.SelectSingleNode("weatherdata/location");
-            result.Add("Місто: ", loc_node.SelectSingleNode("name").InnerText);
-            result.Add("Країна:", loc_node.SelectSingleNode("country").InnerText);
+            result.Add("City: ", loc_node.SelectSingleNode("name").InnerText);
+            //result.Add("Країна:", loc_node.SelectSingleNode("country").InnerText);
             XmlNode geo_node = loc_node.SelectSingleNode("location");
 
             char degrees = (char)176;
@@ -66,8 +66,8 @@ namespace SegasTelegramBotWebApplicationSP
                 DateTime time =
                     DateTime.Parse(time_node.Attributes["from"].Value,
                         null, DateTimeStyles.AssumeUniversal);
-                var culture = new CultureInfo("uk-UA");
-
+                //var culture = new CultureInfo("uk-UA");
+                var culture = new CultureInfo("en-EN");
                 // Get the temperature.
                 XmlNode temp_node = time_node.SelectSingleNode("temperature");
                 string temp = temp_node.Attributes["value"].Value;
