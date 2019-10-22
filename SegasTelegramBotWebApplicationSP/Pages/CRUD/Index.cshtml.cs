@@ -33,7 +33,7 @@ namespace SegasTelegramBotWebApplicationSP.Pages.CRUD
 
             ViewData["ReactionChance"] = BotHome.GetBotHomeInstance.ReactionChance.ToString();
 
-            ViewData["Error"] = BotHome.GetBotHomeInstance.GetError;
+            ViewData["Error"] = BotHome.GetBotHomeInstance.Error;
 
             SBCommands = await _context.SBCommands.ToListAsync();
         }

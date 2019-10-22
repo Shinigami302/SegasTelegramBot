@@ -11,6 +11,7 @@ namespace SegasTelegramBotWebApplicationSP
         private DataReader _dataReader;
         private TelegramBotClient _bot;
         private int messageCountFromOneUser = 0;
+        private User currentUser;
 
         public ReactionSimulator(DataReader dataReader, TelegramBotClient bot)
         {
@@ -18,7 +19,7 @@ namespace SegasTelegramBotWebApplicationSP
             _bot = bot;
         }
 
-        public async void SimulateReaction(Message message, User currentUser, int reactionChance )
+        public async void SimulateReaction(Message message, int reactionChance )
         {
             string messageText = message.Text;
             messageText = messageText.ToLower();

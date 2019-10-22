@@ -25,9 +25,9 @@ namespace SegasTelegramBotWebApplicationSP
         // Query codes.
         private string[] QueryCodes = { "q", "zip", "id", };
 
-        private string prelimTemp = String.Empty;
+        private string nightTemp = String.Empty;
 
-        public Dictionary<string, string> GetLivsForecast()
+        public Dictionary<string, string> GetLvivsForecast()
         {
             string url = ForecastUrl.Replace("@LOC@", "702550");
             url = url.Replace("@QUERY@", QueryCodes[2]);
@@ -37,9 +37,9 @@ namespace SegasTelegramBotWebApplicationSP
                 {
                     return GetForecast(client.DownloadString(url));
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return null;
+                    throw new Exception("Exeption in Forecast part: " + ex.Message);
                 }
             }
         }
@@ -47,51 +47,67 @@ namespace SegasTelegramBotWebApplicationSP
         private Dictionary<string, string> GetForecast(string xml)
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
-            // Load the response into an XML document.
-            XmlDocument xml_doc = new XmlDocument();
-            String currentDay = String.Empty;
-            xml_doc.LoadXml(xml);
-
-            // Get the city, country, latitude, and longitude.
-            XmlNode loc_node = xml_doc.SelectSingleNode("weatherdata/location");
-            result.Add("City: ", loc_node.SelectSingleNode("name").InnerText);
-            //result.Add("Країна:", loc_node.SelectSingleNode("country").InnerText);
-            XmlNode geo_node = loc_node.SelectSingleNode("location");
-
-            char degrees = (char)176;
-
-            foreach (XmlNode time_node in xml_doc.SelectNodes("//time"))
+            try
             {
-                // Get the time in UTC.
-                DateTime time =
-                    DateTime.Parse(time_node.Attributes["from"].Value,
-                        null, DateTimeStyles.AssumeUniversal);
-                //var culture = new CultureInfo("uk-UA");
-                var culture = new CultureInfo("en-EN");
-                // Get the temperature.
-                XmlNode temp_node = time_node.SelectSingleNode("temperature");
-                string temp = temp_node.Attributes["value"].Value;
-                XmlNode clouds_node = time_node.SelectSingleNode("clouds");
-                string cloudsVal = clouds_node.Attributes["value"].Value;
-                double tempNum = Math.Round(double.Parse(temp.Replace('.', ',')));
-                
-                if (time.TimeOfDay == new TimeSpan(09, 00, 00))
+                // Load the response into an XML document.
+                XmlDocument xml_doc = new XmlDocument();
+                String currentDay = String.Empty;
+                xml_doc.LoadXml(xml);
+
+                // Get the city, country, latitude, and longitude.
+                XmlNode loc_node = xml_doc.SelectSingleNode("weatherdata/location");
+                result.Add("City: ", loc_node.SelectSingleNode("name").InnerText);
+                //result.Add("Країна:", loc_node.SelectSingleNode("country").InnerText);
+                //XmlNode geo_node = loc_node.SelectSingleNode("location");
+
+                char degrees = (char)176;
+
+                //result.Add("TIME SPAN  ", new TimeSpan(03, 00, 00).ToString().ToString());
+                //int i = 0;
+
+                foreach (XmlNode time_node in xml_doc.SelectNodes("//time"))
                 {
-                    prelimTemp = tempNum.ToString();
-                }
-                if (!currentDay.Equals(time.DayOfWeek.ToString()) && time.TimeOfDay == new TimeSpan(12, 00, 00))
-                {
-                    currentDay = time.DayOfWeek.ToString();
-                    if (!string.Empty.Equals(prelimTemp))
+                    // Get the time in UTC.
+                    DateTime time =
+                        DateTime.Parse(time_node.Attributes["from"].Value,
+                            null, DateTimeStyles.AssumeUniversal);
+                    //var culture = new CultureInfo("uk-UA");
+                    //var culture = new CultureInfo("en-EN");
+                    // Get the temperature.
+                    XmlNode temp_node = time_node.SelectSingleNode("temperature");
+                    string temp = temp_node.Attributes["value"].Value;
+                    XmlNode clouds_node = time_node.SelectSingleNode("clouds");
+                    string cloudsVal = clouds_node.Attributes["value"].Value;
+                    //double tempNum = Math.Round(double.Parse(temp.Replace('.', ',')));
+                    double tempNum = Math.Round(double.Parse(temp));
+                    //result.Add(" " + i++, time.TimeOfDay.ToString());
+                    //result.Add(i.ToString(), (time.TimeOfDay == new TimeSpan(03, 00, 00)).ToString());
+
+
+                    //in USA format night time comes after DAY TIME. Why so? Who fucking knows...
+                    if (time.TimeOfDay == new TimeSpan(02, 00, 00))
                     {
-                        result.Add(culture.DateTimeFormat.GetDayName(time.DayOfWeek).ToString(), 
-                            $":  {prelimTemp + degrees} - {tempNum.ToString() + degrees}  {cloudsVal}");
+                        nightTemp = tempNum.ToString();
                     }
-                    else
+
+                    if (!currentDay.Equals(time.DayOfWeek.ToString()) && time.TimeOfDay == new TimeSpan(14, 00, 00))
                     {
-                        result.Add(culture.DateTimeFormat.GetDayName(time.DayOfWeek).ToString(), $":  {tempNum.ToString() + degrees}  {cloudsVal}");
+                        currentDay = time.DayOfWeek.ToString();
+                        if (!string.Empty.Equals(nightTemp))
+                        {
+                            result.Add(time.DayOfWeek.ToString(),
+                                $":  {nightTemp + degrees} / {tempNum.ToString() + degrees}  {cloudsVal}");
+                        }
+                        else
+                        {
+                            result.Add(time.DayOfWeek.ToString(), $":  {tempNum.ToString() + degrees}  {cloudsVal}");
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Exeption in Forecast part: " + ex.Message);
             }
             return result;
         }

@@ -17,7 +17,6 @@ namespace SegasTelegramBotWebApplicationSP
         private TelegramBotClient bot;
         private static BotHome _instance;
         private bool botIsRunning;
-        private User currentUser;
         private bool firstRevMode;
         private SegasBotContext _context;
         private DataReader _dataReader;
@@ -38,7 +37,7 @@ namespace SegasTelegramBotWebApplicationSP
 
         public bool BotReaction { get; set; }
 
-        public string GetError { get; private set; }
+        public string Error { get; private set; }
 
         public int ReactionChance 
         { 
@@ -105,7 +104,6 @@ namespace SegasTelegramBotWebApplicationSP
                 Bot.OnReceiveError += BotOnReceiveError;
                 Bot.StartReceiving(Array.Empty<UpdateType>());
                 reactionChance = 0;
-                currentUser = null;
                 BotReaction = false;
                 ReactionSimulator = new ReactionSimulator(DataReader, Bot);
             }
@@ -122,6 +120,9 @@ namespace SegasTelegramBotWebApplicationSP
             string messagesText = String.Empty;
             string range = String.Empty;
             if (message == null || message.Type != MessageType.Text) return;
+
+            //await Bot.SendStickerAsync(message.Chat.Id, new Telegram.Bot.Types.InputFiles.InputOnlineFile("CAADAgADGAADanqJDYaPyedRFhhtFgQ"));
+
             if (firstRevMode)
             {
                 if (!message.Text.Contains("/botClassic"))
@@ -174,15 +175,24 @@ namespace SegasTelegramBotWebApplicationSP
                     LolStuff.LolRoll(message, Bot);
                     break;
                 case "/weather":
-                    await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                     Forecast forecast = new Forecast();
                     String s = String.Empty;
-                    Dictionary<string, string> result = forecast.GetLivsForecast();
-                    foreach (var item in result)
+                    try
                     {
-                        s += item.Key.ToString() + " " + item.Value.ToString() + "\n";
+                        Dictionary<string, string> result = forecast.GetLvivsForecast();
+                        if (null != result)
+                        {
+                            foreach (var item in result)
+                            {
+                                s += item.Key.ToString() + " " + item.Value.ToString() + "\n";
+                            }
+                            await Bot.SendTextMessageAsync(message.Chat.Id, s);
+                        }
                     }
-                    await Bot.SendTextMessageAsync(message.Chat.Id, s);
+                    catch (Exception ex)
+                    {
+                        Error += ex.Message;
+                    }
                     break;
                 case "/exchange":
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
@@ -225,7 +235,7 @@ namespace SegasTelegramBotWebApplicationSP
                     firstRevMode = true;
                     break;
                 default:
-                    if (BotReaction) ReactionSimulator.SimulateReaction(message, currentUser, reactionChance);
+                    if (BotReaction) ReactionSimulator.SimulateReaction(message, ReactionChance);
                         break;
             }
         }
@@ -255,7 +265,7 @@ namespace SegasTelegramBotWebApplicationSP
 
         private void BotOnReceiveError(object sender, ReceiveErrorEventArgs receiveErrorEventArgs)
         {
-            GetError += receiveErrorEventArgs.ApiRequestException.Message;
+            Error += receiveErrorEventArgs.ApiRequestException.Message;
         }
 
         async private void Roll(Message message, string range)
