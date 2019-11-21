@@ -121,21 +121,6 @@ namespace SegasTelegramBotWebApplicationSP
             string range = String.Empty;
             if (message == null || message.Type != MessageType.Text) return;
 
-            //await Bot.SendStickerAsync(message.Chat.Id, new Telegram.Bot.Types.InputFiles.InputOnlineFile("CAADAgADGAADanqJDYaPyedRFhhtFgQ"));
-
-            if (firstRevMode)
-            {
-                if (!message.Text.Contains("/botClassic"))
-                {
-                    await Bot.SendTextMessageAsync(message.Chat.Id, $"{message.Text}? да пішов ти нахуй, {message.From.FirstName}!");
-                }
-                else
-                {
-                    firstRevMode = false;
-                    await Bot.SendTextMessageAsync(message.Chat.Id, $"Режим бота першої ревізії ВИКЛ");
-                }
-                return;
-            }
             if (message.Text.Contains("@SegasBot"))
             {
                 messagesText = message.Text.Substring(0, message.Text.IndexOf("@SegasBot"));
@@ -143,6 +128,20 @@ namespace SegasTelegramBotWebApplicationSP
             else
             {
                 messagesText = message.Text;
+            }
+
+            if (firstRevMode)
+            {
+                if (!messagesText.Contains("/botClassic") || !messagesText.Contains("/botclassic"))
+                {
+                    await Bot.SendTextMessageAsync(message.Chat.Id, $"{message.Text}? та пішов ти нахуй, {message.From.FirstName}!");
+                }
+                else
+                {
+                    firstRevMode = false;
+                    await Bot.SendTextMessageAsync(message.Chat.Id, $"Режим бота першої ревізії ВИКЛ");
+                }
+                return;
             }
 
             if (messagesText.StartsWith("/roll"))
@@ -157,7 +156,7 @@ namespace SegasTelegramBotWebApplicationSP
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                     await Task.Delay(500);
                     await Bot.SendTextMessageAsync(
-                                    message.Chat.Id, "Ну хулі тут, вибирай: \n\n"
+                        message.Chat.Id, "Ну чьо тут, вибирай: \n\n"
                         + "/weather - погода у Львові\n" 
                         + "/roll - рулетка ( дефолт 1-100 )\n"
                         + "/lolroll - LOL рулетка\n"

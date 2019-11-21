@@ -83,8 +83,8 @@ namespace SegasTelegramBotWebApplicationSP
                     return;
                 }
             }
-
-            if ( reactionChance >= random.Next(1, 101))
+            int randomNumber = random.Next(1, 101);
+            if (reactionChance >= randomNumber)
             {
                 string[] reactions = _dataReader.GetReactions();
                 string reaction = reactions[random.Next(1, reactions.Length)];
@@ -96,6 +96,22 @@ namespace SegasTelegramBotWebApplicationSP
                 await Task.Delay(500);
                 await _bot.SendTextMessageAsync(message.Chat.Id, reaction);
             }
+            if (reactionChance >= randomNumber / 2 && 0 == (randomNumber %  2))
+            {
+                ReactWithSticker(message, random.Next(0, 8));
+            }
+        }
+
+        private async void ReactWithSticker(Message message, int stickerNumber)
+        {
+            String[] stickerPack = 
+                {
+                        "CAADAgADBgADanqJDVEvGLHrkPLJFgQ", "CAADAgADGAADanqJDYaPyedRFhhtFgQ",
+                        "CAADAgADFgADanqJDe1Tx86_b2OYFgQ", "CAADAgADDQADanqJDeA6sTzcQDk4FgQ",
+                        "CAADAgADFwADanqJDQPrIfd5UHdgFgQ", "CAADAgADEwADanqJDT3zKYyFbedPFgQ",
+                        "CAADAgADFAADanqJDU3zomo8S2TvFgQ", "CAADAgADFAADanqJDU3zomo8S2TvFgQ"
+                };
+            await _bot.SendStickerAsync(message.Chat.Id, new Telegram.Bot.Types.InputFiles.InputOnlineFile(stickerPack[stickerNumber]));
         }
     }
 }

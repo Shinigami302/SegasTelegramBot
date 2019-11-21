@@ -79,6 +79,10 @@ namespace SegasTelegramBotWebApplicationSP
                     XmlNode clouds_node = time_node.SelectSingleNode("clouds");
                     string cloudsVal = clouds_node.Attributes["value"].Value;
                     //double tempNum = Math.Round(double.Parse(temp.Replace('.', ',')));
+                    if (temp.Contains("."))
+                    {
+                        temp = temp.Replace(".", ",");
+                    }
                     double tempNum = Math.Round(double.Parse(temp));
                     //result.Add(" " + i++, time.TimeOfDay.ToString());
                     //result.Add(i.ToString(), (time.TimeOfDay == new TimeSpan(03, 00, 00)).ToString());
