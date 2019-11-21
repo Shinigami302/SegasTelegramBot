@@ -111,7 +111,7 @@ namespace SegasTelegramBotWebApplicationSP
                         "CAADAgADFwADanqJDQPrIfd5UHdgFgQ", "CAADAgADEwADanqJDT3zKYyFbedPFgQ",
                         "CAADAgADFAADanqJDU3zomo8S2TvFgQ", "CAADAgADFAADanqJDU3zomo8S2TvFgQ"
                 };
-            await _bot.SendStickerAsync(message.Chat.Id, new Telegram.Bot.Types.InputFiles.InputOnlineFile(stickerPack[stickerNumber]));
+            await _bot.SendStickerAsync(message.Chat.Id, new Telegram.Bot.Types.InputFiles.InputOnlineFile(stickerPack[stickerNumber])); 
         }
     }
 }
