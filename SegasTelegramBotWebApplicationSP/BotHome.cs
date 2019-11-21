@@ -132,14 +132,14 @@ namespace SegasTelegramBotWebApplicationSP
 
             if (firstRevMode)
             {
-                if (!messagesText.Contains("/botClassic") || !messagesText.Contains("/botclassic"))
-                {
-                    await Bot.SendTextMessageAsync(message.Chat.Id, $"{message.Text}? та пішов ти нахуй, {message.From.FirstName}!");
-                }
-                else
+                if (messagesText.Contains("/botClassic") || messagesText.Contains("/botclassic"))
                 {
                     firstRevMode = false;
                     await Bot.SendTextMessageAsync(message.Chat.Id, $"Режим бота першої ревізії ВИКЛ");
+                }
+                else
+                {
+                    await Bot.SendTextMessageAsync(message.Chat.Id, $"{message.Text}? та пішов ти нахуй, {message.From.FirstName}!");
                 }
                 return;
             }
