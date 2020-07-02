@@ -14,26 +14,40 @@ namespace SegasTelegramBotWebApplicationSP
         
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args).Build();
+            var host = CreateWebHostBuilder(args)
+                .UseKestrel()
+                .UseUrls("http://*:5000")
+                .UseContentRoot(System.IO.Directory.GetCurrentDirectory())
+                .UseIISIntegration()
+                .UseStartup<Startup>()
+                .Build();
             var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
             SegasBotContext ctx = services.GetRequiredService<SegasBotContext>();
+
+            //SimpleDBInit(ctx, services);
             InitBot(BotHome.GetBotHomeInstance, ctx);
 
-            //try
-            //{
-            //    var testItem = new SBCommands() { Answers = "1" };
-            //    ctx.SBCommands.Add(testItem);
-            //    ctx.SaveChanges();
-            //}
-            //catch (Exception ex)
-            //{
 
-            //    var logger = services.GetRequiredService<ILogger<Program>>();
-            //    logger.LogError(ex, "An error occurred while seeding the database.");
-            //}
+            //host.Run();
             CreateWebHostBuilder(args).Build().Run();
             StopBot(BotHome.GetBotHomeInstance);
+        }
+
+        private static void SimpleDBInit(SegasBotContext ctx, IServiceProvider services)
+        {
+            try
+            {
+                var testItem = new SBCommands() { Answers = "1" };
+                ctx.SBCommands.Add(testItem);
+                ctx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, "An error occurred while seeding the database.");
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

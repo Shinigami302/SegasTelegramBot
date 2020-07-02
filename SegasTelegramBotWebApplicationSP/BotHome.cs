@@ -14,6 +14,7 @@ namespace SegasTelegramBotWebApplicationSP
     internal class BotHome
     {
         private readonly string TELEGRAM_TOKEN = "962554948:AAHh6J2clB-gNm4vIemRgXk9NxdET4ZobG4";
+        private readonly string BOT_VERSION = "v0.9.1";
         private TelegramBotClient bot;
         private static BotHome _instance;
         private bool botIsRunning;
@@ -163,7 +164,9 @@ namespace SegasTelegramBotWebApplicationSP
                         + "/exchange - курс валют\n"
                         + "/homoofaday - підар дня\n"
                         + "/heroofaday - герой дня\n"
-                        + "/proverbofaday - народна мудрість дня");
+                        + "/proverbofaday - народна мудрість дня\n"
+                        + "/poll - голосування\n"
+                        + "/info - інформація про бота");
                     break;
                 case "/roll":
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
@@ -232,6 +235,17 @@ namespace SegasTelegramBotWebApplicationSP
                 case "/botclassic":
                     await Bot.SendTextMessageAsync(message.Chat.Id, $"Режим бота першої ревізії ВКЛ.");
                     firstRevMode = true;
+                    break;
+                case "/poll":
+                    await Bot.SendPollAsync(message.Chat.Id, "Чьо мутимо на вихідних?", new List<String> { "Го до Паші", "Го центр",
+                        "Го центр потім, до Паші", "Го за межі Жовкви", " Маю інші справи", "Не буду в Жовкві" });
+                    break;
+                case "/info":
+                    await Bot.SendTextMessageAsync(message.Chat.Id,
+                        "Admin page: shinigami302.somee.com/CRUD\n"
+                        + "Mobile API: /api/MobileApi\n"
+                        + $"FirstRevMode: {firstRevMode}\n"
+                        + $"SegasTelegramBot {BOT_VERSION}");
                     break;
                 default:
                     if (BotReaction) ReactionSimulator.SimulateReaction(message, ReactionChance);
