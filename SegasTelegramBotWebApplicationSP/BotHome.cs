@@ -156,17 +156,32 @@ namespace SegasTelegramBotWebApplicationSP
                 case "/start":
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                     await Task.Delay(500);
+                    BotCommand[] commands = await Bot.GetMyCommandsAsync();
+                    String commandsString = String.Empty;
+                    foreach (var item in commands)
+                    {
+                        commandsString += $"/{item.Command} - {item.Description}\n";
+                    }
                     await Bot.SendTextMessageAsync(
                         message.Chat.Id, "Ну чьо тут, вибирай: \n\n"
-                        + "/weather - погода у Львові\n" 
-                        + "/roll - рулетка ( дефолт 1-100 )\n"
-                        + "/lolroll - LOL рулетка\n"
-                        + "/exchange - курс валют\n"
-                        + "/homoofaday - підар дня\n"
-                        + "/heroofaday - герой дня\n"
-                        + "/proverbofaday - народна мудрість дня\n"
-                        + "/poll - голосування\n"
-                        + "/info - інформація про бота");
+                        + commandsString);
+                    
+                    // NEW COMMANDS ADDING
+                    //------------------------------------------------------------
+                    //BotCommand[] commands = await Bot.GetMyCommandsAsync();
+
+                    //BotCommand[] commandsNew = new BotCommand[commands.Length + 2];
+                    //for (int i = 0; i < commands.Length; i++)
+                    //{
+                    //    commandsNew[i] = commands[i];
+                    //}
+                    //BotCommand command = new BotCommand() { Command = "poll", Description = "голосування" };
+                    //BotCommand command2 = new BotCommand() { Command = "info", Description = "інформація про бота" };
+                    //commandsNew[commands.Length] = command;
+                    //commandsNew[commands.Length + 1] = command2;
+                    //Bot.SetMyCommands
+                    //------------------------------------------------------------
+
                     break;
                 case "/roll":
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
@@ -238,14 +253,16 @@ namespace SegasTelegramBotWebApplicationSP
                     break;
                 case "/poll":
                     await Bot.SendPollAsync(message.Chat.Id, "Чьо мутимо на вихідних?", new List<String> { "Го до Паші", "Го центр",
-                        "Го центр потім, до Паші", "Го за межі Жовкви", " Маю інші справи", "Не буду в Жовкві" });
+                        "Го центр, потім до Паші", "Го за межі Жовкви", " Маю інші справи", "Не буду в Жовкві", "Я Паша. І мене не буде." });
                     break;
                 case "/info":
                     await Bot.SendTextMessageAsync(message.Chat.Id,
-                        "Admin page: shinigami302.somee.com/CRUD\n"
+                        "---------------------------------------\n"
+                        + "Admin page: shinigami302.somee.com/CRUD\n"
                         + "Mobile API: /api/MobileApi\n"
                         + $"FirstRevMode: {firstRevMode}\n"
-                        + $"SegasTelegramBot {BOT_VERSION}");
+                        + $"SegasTelegramBot {BOT_VERSION}\n"
+                        + "---------------------------------------\n");
                     break;
                 default:
                     if (BotReaction) ReactionSimulator.SimulateReaction(message, ReactionChance);
