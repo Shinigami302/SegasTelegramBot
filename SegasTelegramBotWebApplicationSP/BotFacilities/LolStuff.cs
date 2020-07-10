@@ -61,7 +61,7 @@ namespace SegasTelegramBotWebApplicationSP
             await bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
             await Task.Delay(500);
             Random random = new Random();
-            string user = users[random.Next(0, 4)];
+            string user = users[random.Next(0, 5)];
 
             await bot.SendTextMessageAsync(message.Chat.Id, "!!!КВЕРЯЮ БАЗУ ЖОВКІВСЬКОГО МВД!!!");
             await bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
@@ -77,7 +77,7 @@ namespace SegasTelegramBotWebApplicationSP
             await bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
             await Task.Delay(500);
             Random random = new Random();
-            string user = users[random.Next(0, 4)];
+            string user = users[random.Next(0, 5)];
 
             await bot.SendTextMessageAsync(message.Chat.Id, "Дзвоню Аллаху...");
             await bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
