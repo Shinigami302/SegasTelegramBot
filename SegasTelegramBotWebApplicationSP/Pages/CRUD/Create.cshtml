@@ -15,6 +15,16 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="SBCommands.ChatId" class="control-label"></label>
+                <input asp-for="SBCommands.ChatId" class="form-control" />
+                <span asp-validation-for="SBCommands.ChatId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SBCommands.ChatName" class="control-label"></label>
+                <input asp-for="SBCommands.ChatName" class="form-control" />
+                <span asp-validation-for="SBCommands.ChatName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="SBCommands.Users" class="control-label"></label>
                 <input asp-for="SBCommands.Users" class="form-control" />
                 <span asp-validation-for="SBCommands.Users" class="text-danger"></span>
@@ -33,6 +43,26 @@
                 <label asp-for="SBCommands.Answers" class="control-label"></label>
                 <input asp-for="SBCommands.Answers" class="form-control" />
                 <span asp-validation-for="SBCommands.Answers" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SBCommands.TriggersHowAreYou" class="control-label"></label>
+                <input asp-for="SBCommands.TriggersHowAreYou" class="form-control" />
+                <span asp-validation-for="SBCommands.TriggersHowAreYou" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SBCommands.TriggersAnswers" class="control-label"></label>
+                <input asp-for="SBCommands.TriggersAnswers" class="form-control" />
+                <span asp-validation-for="SBCommands.TriggersAnswers" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SBCommands.BotReaction" class="control-label"></label>
+                <input asp-for="SBCommands.BotReaction" class="form-control" />
+                <span asp-validation-for="SBCommands.BotReaction" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SBCommands.ProverbOfTheDay" class="control-label"></label>
+                <input asp-for="SBCommands.ProverbOfTheDay" class="form-control" />
+                <span asp-validation-for="SBCommands.ProverbOfTheDay" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

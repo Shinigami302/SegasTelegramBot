@@ -7,72 +7,78 @@
 }
 
 <h1>Admin's Panel</h1>
-<!--
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-    -->
-    <p>Reaction: @ViewData["BotReaction"]</p>
-    <p>Reaction chance: @ViewData["ReactionChance"]%</p>
-    <table class="table">
-        <thead>
+
+
+<p>Bot Reaction: @ViewData["BotReaction"]</p>
+<p>Reaction chance: @ViewData["ReactionChance"]%</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].ChatId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].ChatName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].Users)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].Reactions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].HowAreYou)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].Answers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].TriggersHowAreYou)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SBCommands[0].TriggersAnswers)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.SBCommands)
+        {
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.SBCommands[0].Users)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.SBCommands[0].Reactions)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.SBCommands[0].HowAreYou)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.SBCommands[0].Answers)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.SBCommands[0].TriggersAnswers)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.SBCommands[0].TriggersHowAreYou)
-                </th>
-                <th></th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChatId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChatName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Users)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reactions)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HowAreYou)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Answers)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TriggersHowAreYou)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TriggersAnswers)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.SBCommands)
-            {
-                <tr>
-                    <td>
-                        <div class="b">@Html.DisplayFor(modelItem => item.Users)</div>
-                    </td>
-                    <td>
-                        <div class="b">@Html.DisplayFor(modelItem => item.Reactions)</div>
-                    </td>
-                    <td>
-                        <div class="b">@Html.DisplayFor(modelItem => item.HowAreYou)</div>
-                    </td>
-                    <td>
-                        <div class="b">@Html.DisplayFor(modelItem => item.Answers)</div>
-                    </td>
-                    <td>
-                        <div class="b">@Html.DisplayFor(modelItem => item.TriggersAnswers)</div>
-                    </td>
-                    <td>
-                        <div class="b">@Html.DisplayFor(modelItem => item.TriggersHowAreYou)</div>
-                    </td>
-                    <td>
-                        <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
-                        <!--|
-                        <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
-                            |
-                         <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-                        -->
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
 
-    <p>Log window:</p>
-    @ViewData["Error"]
+<p>Bot Version: @ViewData["BotVersion"]</p>
 
+<p>Log window:</p>
+@ViewData["Error"]

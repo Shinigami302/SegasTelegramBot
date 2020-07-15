@@ -25,34 +25,45 @@
             </p>
             <p>Bot's reaction chance 1-100 (%): <input class="form-control667" asp-for="ReactionChance" min="1" max="100" /></p>
             <div class="form-group">
+                <label asp-for="SBCommands.ChatName" class="control-label"></label>
+                <textarea  asp-for="SBCommands.ChatName" class="form-control666"></textarea>
+                <span asp-validation-for="SBCommands.ChatName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="SBCommands.Users" class="control-label"></label>
-                <textarea asp-for="SBCommands.Users" class="form-control666"></textarea>
+                <textarea  asp-for="SBCommands.Users" class="form-control666"></textarea>
                 <span asp-validation-for="SBCommands.Users" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SBCommands.Reactions" class="control-label"></label>
-                <textarea asp-for="SBCommands.Reactions" class="form-control666"></textarea>
+                <textarea  asp-for="SBCommands.Reactions" class="form-control666"></textarea>
                 <span asp-validation-for="SBCommands.Reactions" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SBCommands.HowAreYou" class="control-label"></label>
-                <textarea asp-for="SBCommands.HowAreYou" class="form-control666"></textarea>
+                <textarea  asp-for="SBCommands.HowAreYou" class="form-control666"></textarea>
                 <span asp-validation-for="SBCommands.HowAreYou" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SBCommands.Answers" class="control-label"></label>
-                <textarea asp-for="SBCommands.Answers" class="form-control666"></textarea>
+                <textarea  asp-for="SBCommands.Answers" class="form-control666"></textarea>
                 <span asp-validation-for="SBCommands.Answers" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SBCommands.TriggersAnswers" class="control-label"></label>
-                <textarea asp-for="SBCommands.TriggersAnswers" class="form-control666"></textarea>
-                <span asp-validation-for="SBCommands.TriggersAnswers" class="text-danger"></span>
+                <label asp-for="SBCommands.TriggersHowAreYou" class="control-label"></label>
+                <textarea  asp-for="SBCommands.TriggersHowAreYou" class="form-control666"></textarea>
+                <span asp-validation-for="SBCommands.TriggersHowAreYou" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SBCommands.TriggersHowAreYou" class="control-label"></label>
-                <textarea asp-for="SBCommands.TriggersHowAreYou" class="form-control666"></textarea>
-                <span asp-validation-for="SBCommands.TriggersHowAreYou" class="text-danger"></span>
+                <label asp-for="SBCommands.TriggersAnswers" class="control-label"></label>
+                <textarea  asp-for="SBCommands.TriggersAnswers" class="form-control666"></textarea>
+                <span asp-validation-for="SBCommands.TriggersAnswers" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SBCommands.ProverbOfTheDay" class="control-label"></label>
+                <textarea  asp-for="SBCommands.ProverbOfTheDay" class="form-control666"></textarea>
+                <span asp-validation-for="SBCommands.ProverbOfTheDay" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -70,96 +81,94 @@
 }
 
 <style>
-
     .form-control666 {
-    display: block;
-    width: 300%;
-    height: 100%;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
+        display: block;
+        width: 300%;
+        height: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
 
-.form-control667 {
-    display: block;
-    width: 20%;
-    height: 100%;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
+    .form-control667 {
+        display: block;
+        width: 20%;
+        height: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
 
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 40px;
-  height: 24px;
-}
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 24px;
+    }
 
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
 
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
 
-input:checked + .slider {
-  background-color: #2196F3;
-}
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
 
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
 
-input:checked + .slider:before {
-  -webkit-transform: translateX(16px);
-  -ms-transform: translateX(16px);
-  transform: translateX(16px);
-}
+    input:checked + .slider:before {
+        -webkit-transform: translateX(16px);
+        -ms-transform: translateX(16px);
+        transform: translateX(16px);
+    }
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
 
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
+        .slider.round:before {
+            border-radius: 50%;
+        }
 </style>

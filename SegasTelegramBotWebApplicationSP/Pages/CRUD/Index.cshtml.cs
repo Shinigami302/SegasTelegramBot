@@ -19,18 +19,19 @@ namespace SegasTelegramBotWebApplicationSP.Pages.CRUD
         }
 
         public IList<SBCommands> SBCommands { get; set; }
-        
+
         public async Task OnGetAsync()
         {
             if (BotHome.GetBotHomeInstance.BotReaction)
             {
-                ViewData["BotReaction"] = "Bot Reaction is TURNED ON";
+                ViewData["BotReaction"] = "ON";
             }
             else
             {
-                ViewData["BotReaction"] = "Bot Reaction is TURNED OFF";
+                ViewData["BotReaction"] = "OFF";
             }
 
+            ViewData["BotVersion"] = BotHome.GetBotHomeInstance.BotVersion.ToString();
             ViewData["ReactionChance"] = BotHome.GetBotHomeInstance.ReactionChance.ToString();
 
             ViewData["Error"] = BotHome.GetBotHomeInstance.Error;

@@ -2,6 +2,7 @@
 using SegasTelegramBotWebApplicationSP.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -14,7 +15,7 @@ namespace SegasTelegramBotWebApplicationSP
     internal class BotHome
     {
         private readonly string TELEGRAM_TOKEN = "962554948:AAHh6J2clB-gNm4vIemRgXk9NxdET4ZobG4";
-        private readonly string BOT_VERSION = "v0.9.2a";
+        private readonly string BOT_VERSION = "v0.9.2b";
         private TelegramBotClient bot;
         private static BotHome _instance;
         private bool botIsRunning;
@@ -36,7 +37,38 @@ namespace SegasTelegramBotWebApplicationSP
 
         }
 
-        public bool BotReaction { get; set; }
+        public string BotVersion
+        {
+            get 
+            {
+                return BOT_VERSION;
+            }
+        }
+
+        public bool BotReaction 
+        {
+            get 
+            { 
+                return DataReader.GetBotReaction(); 
+            }
+            set 
+            {
+                try
+                {
+                    var result = _context.SBCommands.SingleOrDefault(r => r.ChatId == "1");
+                    if (result != null)
+                    {
+                        result.BotReaction = value ? "TRUE" : "FALSE";
+                        _context.SaveChanges();
+                        DataReader.UpdateBotReactionBool(value);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Error += ex.Message;
+                }
+            } 
+        }
 
         public string Error { get; private set; }
 
@@ -44,6 +76,7 @@ namespace SegasTelegramBotWebApplicationSP
         { 
             get 
             {
+                reactionChance = DataReader.GetReactionChance();
                 if (reactionChance > 0)
                 {
                     return reactionChance;
@@ -52,10 +85,6 @@ namespace SegasTelegramBotWebApplicationSP
                 {
                     return 7;
                 }
-            } 
-            set 
-            { 
-                reactionChance = value; 
             } 
         }
 
@@ -104,8 +133,8 @@ namespace SegasTelegramBotWebApplicationSP
                 Bot.OnCallbackQuery += BotOnCallbackQueryReceived;
                 Bot.OnReceiveError += BotOnReceiveError;
                 Bot.StartReceiving(Array.Empty<UpdateType>());
-                reactionChance = 0;
-                BotReaction = false;
+                //reactionChance = 0;
+                //BotReaction = false;
                 ReactionSimulator = new ReactionSimulator(DataReader, Bot);
             }
         }
@@ -231,7 +260,7 @@ namespace SegasTelegramBotWebApplicationSP
                     break;
                 case "/proverbofaday":
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-                    LolStuff.ProverbOfADay(message, Bot);
+                    LolStuff.ProverbOfADay(message, Bot, DataReader.GetProverbOfTheDay());
                     break;
                 case "/botreaction":
                     if (BotReaction) await Bot.SendTextMessageAsync(message.Chat.Id, $"Реакція зараз включена.");
@@ -267,7 +296,7 @@ namespace SegasTelegramBotWebApplicationSP
                         + "Admin page: shinigami302.somee.com/CRUD\n"
                         + "Mobile API: /api/MobileApi\n"
                         + $"FirstRevMode: {firstRevMode}\n"
-                        + $"SegasTelegramBot {BOT_VERSION}\n"
+                        + $"SegasTelegramBot {BotVersion}\n"
                         + "---------------------------------------\n");
                     break;
                 default:

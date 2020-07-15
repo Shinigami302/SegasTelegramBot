@@ -23,6 +23,8 @@ namespace SegasTelegramBotWebApplicationSP
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<SegasBotContext>(options => options.UseSqlServer(connection));
+
+            //Seems like it's usless code below
             //services.AddDbContext<SegasBotContext>(opt =>
             //    opt.UseInMemoryDatabase("SBCommands"));
             //services.Configure<CookiePolicyOptions>(options =>

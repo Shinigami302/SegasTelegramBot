@@ -6,7 +6,7 @@ namespace SegasTelegramBotWebApplicationSP
 {
     class Exchange
     {
-        private const string PRIVAR_URL = "https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=5";
+        private const string PRIVAT_URL = "https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=5";
 
         public List<string> GetCourse()
         {
@@ -16,7 +16,7 @@ namespace SegasTelegramBotWebApplicationSP
             {
                 try
                 {
-                    List<Cash> cashes = ParseResult(client.DownloadString(PRIVAR_URL));
+                    List<Cash> cashes = ParseResult(client.DownloadString(PRIVAT_URL));
                     foreach (Cash item in cashes)
                     {
                         result.Add($"Валюта:  {item.ccy}  в:  {item.base_ccy}  Купити:  " +

@@ -19,6 +19,9 @@ namespace SegasTelegramBotWebApplicationSP
         private string answers;
         private string triggersAnswers;
         private string triggersHowAreYou;
+        private string proverbOfTheDay;
+        private bool botReaction;
+        private int reactionChance;
 
         public DataReader GetDataReader
         {
@@ -84,6 +87,26 @@ namespace SegasTelegramBotWebApplicationSP
             return val;
         }
 
+        public string[] GetProverbOfTheDay()
+        {
+            string[] val = proverbOfTheDay.Split(';');
+            return val;
+        }
+
+        public bool GetBotReaction()
+        {
+            return botReaction;
+        }
+
+        public void UpdateBotReactionBool(bool reaction)
+        {
+            botReaction = reaction;
+        }
+
+        public int GetReactionChance()
+        {
+            return reactionChance;
+        }
 
         private void Init()
         {
@@ -98,6 +121,9 @@ namespace SegasTelegramBotWebApplicationSP
                     answers = list[0].Answers;
                     triggersAnswers = list[0].TriggersAnswers;
                     triggersHowAreYou = list[0].TriggersHowAreYou;
+                    proverbOfTheDay = list[0].ProverbOfTheDay;
+                    botReaction = ("TRUE" == list[0].BotReaction);
+                    reactionChance = list[0].ReactionChance <= 100 ? list[0].ReactionChance : 100;
                 }
                 else
                 {

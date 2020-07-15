@@ -25,11 +25,11 @@ namespace SegasTelegramBotWebApplicationSP
             var services = scope.ServiceProvider;
             SegasBotContext ctx = services.GetRequiredService<SegasBotContext>();
 
+            //Uncomment it when you need to init NEW DB
             //SimpleDBInit(ctx, services);
+
             InitBot(BotHome.GetBotHomeInstance, ctx);
 
-
-            //host.Run();
             CreateWebHostBuilder(args).Build().Run();
             StopBot(BotHome.GetBotHomeInstance);
         }
