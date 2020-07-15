@@ -25,6 +25,11 @@
             </p>
             <p>Bot's reaction chance 1-100 (%): <input class="form-control667" asp-for="ReactionChance" min="1" max="100" /></p>
             <div class="form-group">
+                <label asp-for="SBCommands.ChatId" class="control-label"></label>
+                <textarea  asp-for="SBCommands.ChatId" class="form-control666"></textarea>
+                <span asp-validation-for="SBCommands.ChatId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="SBCommands.ChatName" class="control-label"></label>
                 <textarea  asp-for="SBCommands.ChatName" class="form-control666"></textarea>
                 <span asp-validation-for="SBCommands.ChatName" class="text-danger"></span>

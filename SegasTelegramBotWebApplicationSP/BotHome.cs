@@ -15,7 +15,7 @@ namespace SegasTelegramBotWebApplicationSP
     internal class BotHome
     {
         private readonly string TELEGRAM_TOKEN = "962554948:AAHh6J2clB-gNm4vIemRgXk9NxdET4ZobG4";
-        private readonly string BOT_VERSION = "v0.9.2b";
+        private readonly string BOT_VERSION = "v0.9.150720";
         private TelegramBotClient bot;
         private static BotHome _instance;
         private bool botIsRunning;
