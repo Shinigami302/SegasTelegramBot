@@ -14,8 +14,12 @@ namespace SegasTelegramBotWebApplicationSP
 {
     internal class BotHome
     {
+        //main Telegram token provided by BotFather ( Telegram BotApi )
         private readonly string TELEGRAM_TOKEN = "962554948:AAHh6J2clB-gNm4vIemRgXk9NxdET4ZobG4";
-        private readonly string BOT_VERSION = "v0.9.150720";
+        // bot version
+        private readonly string BOT_VERSION = "v0.9.180720";
+
+#region fields
         private TelegramBotClient bot;
         private static BotHome _instance;
         private bool botIsRunning;
@@ -23,7 +27,8 @@ namespace SegasTelegramBotWebApplicationSP
         private SegasBotContext _context;
         private DataReader _dataReader;
         private int reactionChance;
-
+#endregion
+#region properties
         public static BotHome GetBotHomeInstance
         {
             get
@@ -39,19 +44,19 @@ namespace SegasTelegramBotWebApplicationSP
 
         public string BotVersion
         {
-            get 
+            get
             {
                 return BOT_VERSION;
             }
         }
 
-        public bool BotReaction 
+        public bool BotReaction
         {
-            get 
-            { 
-                return DataReader.GetBotReaction(); 
+            get
+            {
+                return DataReader.GetBotReaction();
             }
-            set 
+            set
             {
                 try
                 {
@@ -67,14 +72,14 @@ namespace SegasTelegramBotWebApplicationSP
                 {
                     Error += ex.Message;
                 }
-            } 
+            }
         }
 
         public string Error { get; private set; }
 
-        public int ReactionChance 
-        { 
-            get 
+        public int ReactionChance
+        {
+            get
             {
                 reactionChance = DataReader.GetReactionChance();
                 if (reactionChance > 0)
@@ -85,7 +90,7 @@ namespace SegasTelegramBotWebApplicationSP
                 {
                     return 7;
                 }
-            } 
+            }
         }
 
         private DataReader DataReader
@@ -97,9 +102,9 @@ namespace SegasTelegramBotWebApplicationSP
                     _dataReader = new DataReader(_context);
                     return _dataReader;
                 }
-                return _dataReader; 
+                return _dataReader;
             }
- 
+
         }
 
         public void ReInitDataReader(SegasBotContext context)
@@ -120,7 +125,7 @@ namespace SegasTelegramBotWebApplicationSP
                 return bot;
             }
         }
-
+#endregion
         public void BotInit(SegasBotContext context)
         {
             //var me = Bot.GetMeAsync().Result;
@@ -198,22 +203,14 @@ namespace SegasTelegramBotWebApplicationSP
                     // NEW COMMAND ADDING
                     //------------------------------------------------------------
 
-                    //BotCommand[] commandsNew = new BotCommand[commands.Length + 1];
-                    //for (int i = 0; i < commands.Length; i++)
-                    //{
-                    //    commandsNew[i] = commands[i];
-                    //}
-                    //BotCommand command = new BotCommand() { Command = "everybody", Description = "усі учасники чату" };
-                    //commandsNew[commands.Length] = commandsNew[commands.Length - 1];
-                    //commandsNew[commands.Length-1] = command;
-                    //Bot.SetMyCommandsAsync(commandsNew);
+                    //addNewCommandToBot(commands, "command text", "command description");
 
                     //------------------------------------------------------------
 
                     break;
                 case "/roll":
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-                    Roll(message, range);
+                    BotFacilities.Roll(message, range, Bot);
                     break;
                 case "/lolroll":
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
@@ -287,7 +284,7 @@ namespace SegasTelegramBotWebApplicationSP
                 case "/everybody":
                 case "/g":
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-                    await Bot.SendTextMessageAsync(message.Chat.Id, "@Uncle_Serhii @pavlo_totskyi @silenthillph Бодя @Far1nHate ");
+                    await Bot.SendTextMessageAsync(message.Chat.Id, "@Uncle_Serhii @pavlo_totskyi @silenthillph @november_sea @Far1nHate ");
                     break;
                 case "/info":
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
@@ -301,8 +298,21 @@ namespace SegasTelegramBotWebApplicationSP
                     break;
                 default:
                     if (BotReaction) ReactionSimulator.SimulateReaction(message, ReactionChance);
-                        break;
+                    break;
             }
+        }
+
+        private void addNewCommandToBot(BotCommand[] commands, string commandText, string commandDescription)
+        {
+            BotCommand[] commandsNew = new BotCommand[commands.Length + 1];
+            for (int i = 0; i < commands.Length; i++)
+            {
+                commandsNew[i] = commands[i];
+            }
+            BotCommand command = new BotCommand() { Command = commandText, Description = commandDescription };
+            commandsNew[commands.Length] = commandsNew[commands.Length - 1];
+            commandsNew[commands.Length - 1] = command;
+            Bot.SetMyCommandsAsync(commandsNew);
         }
 
         private async void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs callbackQueryEventArgs)
@@ -333,21 +343,5 @@ namespace SegasTelegramBotWebApplicationSP
             Error += receiveErrorEventArgs.ApiRequestException.Message;
         }
 
-        async private void Roll(Message message, string range)
-        {
-            int rangeInt;
-            await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-            await Task.Delay(500);
-            Random random = new Random();
-            if(int.TryParse(range, out rangeInt))
-            {
-                await Bot.SendTextMessageAsync(message.Chat.Id, $"{random.Next(1, rangeInt)}");
-            }
-            else
-            {
-                await Bot.SendTextMessageAsync(message.Chat.Id, $"{random.Next(1, 100)}");
-            }
-        }
-      
     }
 }
