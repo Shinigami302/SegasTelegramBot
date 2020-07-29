@@ -23,7 +23,7 @@ namespace SegasTelegramBotWebApplicationSP
         {
             string messageText = message.Text;
             messageText = messageText.ToLower();
-
+            Random random = new Random();
             if (currentUser != message.From)
             {
                 currentUser = message.From;
@@ -34,15 +34,31 @@ namespace SegasTelegramBotWebApplicationSP
                 messageCountFromOneUser++;
                 if (5 == messageCountFromOneUser)
                 {
-                    await _bot.SendTextMessageAsync(message.Chat.Id, $"{message.From.FirstName}, воу-воу братан, полєгче. Все норм, розслабся.");
+                    switch (random.Next(0, 3))
+                    {
+                        case 0:
+                            await _bot.SendTextMessageAsync(message.Chat.Id, $"{message.From.FirstName}, воу-воу братан, полєгче. Все норм, розслабся.");
+                            break;
+                        case 1:
+                            await _bot.SendTextMessageAsync(message.Chat.Id, $"{message.From.FirstName}, тихше, тихше. Все гуд.");
+                            break;
+                        case 2:
+                            await _bot.SendTextMessageAsync(message.Chat.Id, $"{message.From.FirstName}, не розводь срач плз.");
+                            break;
+                    }
                 }
             }
-            Random random = new Random();
 
             int lenghtToCut = messageText.StartsWith("ботік") ? 5 : 3;
             if (messageText.StartsWith("бот") || messageText.StartsWith("ботік"))
             {
                 messageText = messageText.Substring(lenghtToCut, messageText.Length - lenghtToCut);
+                if (string.IsNullOrEmpty(messageText))
+                {
+                    await _bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+                    await Task.Delay(500);
+                    await _bot.SendTextMessageAsync(message.Chat.Id, "Чьо хочеш?");
+                }
                 string[] triggerAnswers = _dataReader.GetTriggersAnswers();
                 bool triggerAnswerIsfound = false;
                 foreach (string item in triggerAnswers)
@@ -58,7 +74,7 @@ namespace SegasTelegramBotWebApplicationSP
                     await _bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                     await Task.Delay(500);
                     string[] answers = _dataReader.GetAnswers();
-                    string answer = answers[random.Next(1, answers.Length)];
+                    string answer = answers[random.Next(0, answers.Length)];
                     await _bot.SendTextMessageAsync(message.Chat.Id, answer);
                     return;
                 }
@@ -78,13 +94,18 @@ namespace SegasTelegramBotWebApplicationSP
                     await _bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                     await Task.Delay(500);
                     string[] howAreYouVar = _dataReader.GetHowAreYou();
-                    string howAreYou = howAreYouVar[random.Next(1, howAreYouVar.Length)];
+                    string howAreYou = howAreYouVar[random.Next(0, howAreYouVar.Length)];
                     await _bot.SendTextMessageAsync(message.Chat.Id, howAreYou);
                     return;
                 }
             }
-            int randomNumber = random.Next(1, 101);
-            if (reactionChance >= randomNumber)
+            int randomNumber = random.Next(0, 101);
+
+            if (reactionChance >= (randomNumber * 3))
+            {
+                ReactWithSticker(message, random.Next(0, 9));
+            }
+            else if (reactionChance >= randomNumber)
             {
                 string[] reactions = _dataReader.GetReactions();
                 string reaction = reactions[random.Next(1, reactions.Length)];
@@ -95,10 +116,6 @@ namespace SegasTelegramBotWebApplicationSP
                 await _bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                 await Task.Delay(500);
                 await _bot.SendTextMessageAsync(message.Chat.Id, reaction);
-            }
-            if (reactionChance >= randomNumber / 2 && 0 == (randomNumber %  2))
-            {
-                ReactWithSticker(message, random.Next(0, 8));
             }
         }
 

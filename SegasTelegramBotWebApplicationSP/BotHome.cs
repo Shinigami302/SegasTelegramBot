@@ -17,7 +17,7 @@ namespace SegasTelegramBotWebApplicationSP
         //main Telegram token provided by BotFather ( Telegram BotApi )
         private readonly string TELEGRAM_TOKEN = "962554948:AAHh6J2clB-gNm4vIemRgXk9NxdET4ZobG4";
         // bot version
-        private readonly string BOT_VERSION = "v0.9.180720";
+        private readonly string BOT_VERSION = "v0.9.290720";
 
 #region fields
         private TelegramBotClient bot;
@@ -200,10 +200,12 @@ namespace SegasTelegramBotWebApplicationSP
                         message.Chat.Id, "Ну чьо тут, вибирай: \n\n"
                         + commandsString);
 
+                    
+
                     // NEW COMMAND ADDING
                     //------------------------------------------------------------
 
-                    //addNewCommandToBot(commands, "command text", "command description");
+                    //addNewCommandToBot(commands, "tellajoke", "ботік розказує анекдот");
 
                     //------------------------------------------------------------
 
@@ -215,6 +217,11 @@ namespace SegasTelegramBotWebApplicationSP
                 case "/lolroll":
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                     LolStuff.LolRoll(message, Bot);
+                    break;
+                case "/tellajoke":
+                    await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+                    Joke joke = new Joke();
+                    await Bot.SendTextMessageAsync(message.Chat.Id, joke.GetAJoke());
                     break;
                 case "/weather":
                     Forecast forecast = new Forecast();
@@ -283,6 +290,7 @@ namespace SegasTelegramBotWebApplicationSP
                     break;
                 case "/everybody":
                 case "/g":
+                case "/all":
                     await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
                     await Bot.SendTextMessageAsync(message.Chat.Id, "@Uncle_Serhii @pavlo_totskyi @silenthillph @november_sea @Far1nHate ");
                     break;

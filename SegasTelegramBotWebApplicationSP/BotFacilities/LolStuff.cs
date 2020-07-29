@@ -14,46 +14,7 @@ namespace SegasTelegramBotWebApplicationSP
         {
             await bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
             await Task.Delay(500);
-            Random random = new Random();
-            switch (random.Next(1, 11))
-            {
-                case 1:
-                    await bot.SendTextMessageAsync(
-                            message.Chat.Id, message.From.FirstName + " очкосос!");
-                    break;
-                case 2:
-                    await bot.SendTextMessageAsync(
-                            message.Chat.Id, message.From.FirstName + " йде нахуй!");
-                    break;
-                case 3:
-                    await bot.SendTextMessageAsync(
-                            message.Chat.Id, message.From.FirstName + " сосе яйця!");
-                    break;
-                case 4:
-                    await bot.SendTextMessageAsync(
-                            message.Chat.Id, message.From.FirstName + " пес!");
-                    break;
-                case 5:
-                    await bot.SendTextMessageAsync(
-                            message.Chat.Id, message.From.FirstName + " ананіст!");
-                    break;
-                case 6:
-                    await bot.SendTextMessageAsync(
-                            message.Chat.Id, message.From.FirstName + " козолуп!");
-                    break;
-                case 7:
-                    await bot.SendTextMessageAsync(
-                            message.Chat.Id, message.From.FirstName + " делать коричневий грязь!");
-                    break;
-                case 8:
-                    await bot.SendTextMessageAsync(
-                            message.Chat.Id, message.From.FirstName + " пєтух!");
-                    break;
-                default:
-                    await bot.SendTextMessageAsync(
-                        message.Chat.Id, message.From.FirstName + " норм пацан!");
-                    break;
-            }
+            await bot.SendTextMessageAsync(message.Chat.Id, "Потім гляну, а то зараз в базі пусто.");
         }
 
         async public static void HomoOfADay(Message message, TelegramBotClient bot, string[] users)
@@ -63,13 +24,13 @@ namespace SegasTelegramBotWebApplicationSP
             Random random = new Random();
             string user = users[random.Next(0, users.Length)];
 
-            await bot.SendTextMessageAsync(message.Chat.Id, "!!!КВЕРЯЮ БАЗУ ЖОВКІВСЬКОГО МВД!!!");
+            await bot.SendTextMessageAsync(message.Chat.Id, "Дзвоню вашим партнерам...");
             await bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
             await Task.Delay(1000);
-            await bot.SendTextMessageAsync(message.Chat.Id, "Запрос сформовано і відправлено. Чекаю відповідь...");
+            await bot.SendTextMessageAsync(message.Chat.Id, "Чекаю відповідь...");
             await bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
             await Task.Delay(1500);
-            await bot.SendTextMessageAsync(message.Chat.Id, $"ПІДАР ДНЯ: {user}!");
+            await bot.SendTextMessageAsync(message.Chat.Id, $"ГЕЙ ДНЯ: {user}!");
         }
 
         async public static void HeroOfADay(Message message, TelegramBotClient bot, string[] users)
@@ -79,7 +40,7 @@ namespace SegasTelegramBotWebApplicationSP
             Random random = new Random();
             string user = users[random.Next(0, users.Length)];
 
-            await bot.SendTextMessageAsync(message.Chat.Id, "Дзвоню Аллаху...");
+            await bot.SendTextMessageAsync(message.Chat.Id, "Пишу СМСку до Миколая...");
             await bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
             await Task.Delay(1500);
             await bot.SendTextMessageAsync(message.Chat.Id, "Питаю, хто сьогодні красавчик...");

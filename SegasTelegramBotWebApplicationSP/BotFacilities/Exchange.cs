@@ -48,7 +48,6 @@ namespace SegasTelegramBotWebApplicationSP
                     item.SelectSingleNode("exchangerate").Attributes["sale"].Value));
             }
 
-
             return cashes;
         }
 
